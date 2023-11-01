@@ -1,21 +1,18 @@
 const express = require('express');
 const router= express.Router();
+const upload = require("../middlewares/upload.middleware"); 
 
 //* Auth Controller
 const authController = require("../controllers/auth.controller");
 
 //* POST-> '/auth/signup' to create a new user
-router.post('/signup', authController.addNewUser);
+router.post('/signup',upload.single('profileImage'), authController.addNewUser);
 
-//* POST-> '/auth/signup' to create a new user
+//* POST-> '/auth/signup' to login a user
 router.post('/login', authController.loginUser);
 
-router.post("/addRecipe", authController.addNewRecipe);
+//* GET-> '/auth/logout' to log a user out
+router.get('/logout', authController.logoutUser);
 
-router.get("/getMyRecipe", authController.getMyRecipe);
-
-router.put("/updateMyRecipe/:id", authController.updateMyRecipe);
-
-router.delete("/deleteMyRecipe/:id", authController.deleteMyRecipe);
 
 module.exports = router;
