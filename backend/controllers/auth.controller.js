@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const Recipe = require("../models/Recipe.model");
 // const multer = require("multer"); // for file uploads
 // const path = require("path");
 
@@ -51,7 +52,7 @@ exports.addNewUser = async (req, res, next) => {
         .status(201)
         .json({ message: "User registered successfully", user: newUser });
     } catch (err) {
-      return res.status(500).json({ message: "User registration failed" });
+      return res.status(500).json({ message: "User registration failed", err });
     }
     // // Handle profile image upload
     // upload.single("profileImage")(req, res, async (err) => {
