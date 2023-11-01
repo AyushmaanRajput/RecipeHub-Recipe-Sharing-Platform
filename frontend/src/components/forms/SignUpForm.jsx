@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
 import {
   Box,
   Heading,
@@ -7,10 +9,15 @@ import {
   Input,
   Textarea,
   Button,
+  Select,
 } from "@chakra-ui/react";
-import axios from "axios";
+import { createUser } from "../../redux/authReducer/actions";
+import { useDispatch } from "react-redux";
 
 export const SignUpForm = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,7 +31,6 @@ export const SignUpForm = () => {
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     if (type === "file") {
-      console.log("Selected image file:", e.target.files[0]);
       setProfileImage(e.target.files[0]);
     } else {
       setFormData({
@@ -34,39 +40,30 @@ export const SignUpForm = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Create a FormData object to send the form data
-    const form = new FormData();
-    for (const key in formData) {
-      form.append(key, formData[key]);
-    }
-    if (profileImage) {
-      form.append("profileImage", profileImage);
-    }
-    console.log(form, formData, profileImage);
-    try {
-      // Send the registration data to the server
-      const response = await axios.post(
-        "http://localhost:8080/auth/signup",
-        form ,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append("name", formData.name);
+    formDataToSubmit.append("email", formData.email);
+    formDataToSubmit.append("password", formData.password);
+    formDataToSubmit.append("city", formData.city);
+    formDataToSubmit.append("gender", formData.gender);
+    formDataToSubmit.append("bio", formData.bio);
+    formDataToSubmit.append("profileImage", profileImage);
 
-      // Handle the server response here
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+    dispatch(createUser(formDataToSubmit, toast, navigate));
   };
 
   return (
-    <Box>
+    <Box
+      p={4}
+      borderWidth="1px"
+      borderRadius="md"
+      width="min(30rem,100%)"
+      mx="auto"
+      mt="2rem"
+    >
       <Heading as="h2" size="lg" mb={4}>
         Sign Up
       </Heading>
@@ -87,15 +84,22 @@ export const SignUpForm = () => {
           <FormLabel>City</FormLabel>
           <Input type="text" name="city" onChange={handleChange} />
         </FormControl>
-        <FormControl id="gender">
+        <FormControl id="gender" isRequired>
           <FormLabel>Gender</FormLabel>
-          <Input type="text" name="gender" onChange={handleChange} />
+          <Select
+            name="gender"
+            onChange={handleChange}
+            placeholder="Select Gender"
+          >
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </Select>
         </FormControl>
         <FormControl id="bio">
           <FormLabel>Bio</FormLabel>
           <Textarea name="bio" onChange={handleChange} />
         </FormControl>
-        <FormControl id="profileImage" isRequired>
+        <FormControl id="profileImage">
           <FormLabel>Profile Image</FormLabel>
           <Input
             type="file"

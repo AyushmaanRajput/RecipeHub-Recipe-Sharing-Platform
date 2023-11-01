@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../redux/authReducer/actions";
+
 import {
   Box,
   Button,
@@ -8,9 +13,13 @@ import {
   FormControl,
   FormLabel,
   Stack,
+  Heading,
 } from "@chakra-ui/react";
 
 export const LoginForm = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -19,14 +28,12 @@ export const LoginForm = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic here
     if (email && password) {
-      console.log({
-        email,
-        password,
-      });
+      let userObj = { email, password };
+      dispatch(loginUser(userObj, toast, navigate));
     }
   };
 
@@ -37,7 +44,11 @@ export const LoginForm = () => {
       borderRadius="md"
       width="min(30rem,100%)"
       mx="auto"
+      mt="2rem"
     >
+      <Heading as="h2" size="lg" mb={4}>
+        Login
+      </Heading>
       <form onSubmit={handleSubmit}>
         <Stack spacing={4}>
           <FormControl>
