@@ -240,6 +240,7 @@ export const Explore = () => {
     "Greek",
     "Filipino",
     "Japanese",
+    "Other"
   ];
 
   return (

@@ -6,7 +6,7 @@ import { Account } from "../pages/Account";
 import { Login } from "../pages/Login";
 import { SignUp } from "../pages/SignUp";
 import { PrivateRoute } from "./PrivateRoute";
-import { UserRecipes } from "../pages/UserRecipes";
+import { AddRecipeModal } from "../pages/AddRecipeModal";
 
 export const AllRoutes = () => {
   return (
@@ -25,7 +25,7 @@ export const AllRoutes = () => {
         path="/user-recipes"
         element={
           <PrivateRoute>
-            <UserRecipes />
+            <AddRecipeModal />
           </PrivateRoute>
         }
       ></Route>

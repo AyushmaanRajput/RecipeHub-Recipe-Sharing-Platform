@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const BlackList= require('../models/Blacklist.model');
+const BlackList = require("../models/Blacklist.model");
 require("dotenv").config();
 
 const auth = async (req, res, next) => {
@@ -12,7 +12,9 @@ const auth = async (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, function (err, decoded) {
       if (decoded) {
-        req.body.userId = decoded.userId;
+        console.log(decoded, "");
+        // req.body.userId = decoded.userId;
+        req.userId = decoded.userId;
         next();
       } else {
         return res.status(400).json({ message: "Unauthorized" });
