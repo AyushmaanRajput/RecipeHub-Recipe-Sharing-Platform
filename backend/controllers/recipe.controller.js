@@ -1,22 +1,44 @@
-const Recipe = require('../models/Recipe.model');
+const Recipe = require("../models/Recipe.model");
 
 exports.addNewRecipe = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    res.status(201).json({ message: "Please login first to add new recipe" });
+  // console.log(req.body, req.files, req.userId);
+  const images = [];
+  if (req.files && req.files.length > 0) {
+    req.files.forEach((file) => {
+      images.push(file.path);
+    });
   }
   try {
-    const recipe = new Recipe(req.body);
-    await recipe.save();
-    res
-      .status(201)
-      .json({ message: `${req.body.title} posted successfully to the feed` });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Unable to post recipe", error: error });
+    const newRecipe = new Recipe({
+      ...req.body,
+      userId: req.userId,
+      images: images,
+    });
+    await newRecipe.save();
+    res.status(201).json({
+      message: "Recipe created successfully",
+      recipe: newRecipe,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Recipe creation failed" });
   }
 };
+// const token = req.headers.authorization?.split(" ")[1];
+// if (!token) {
+//   res.status(201).json({ message: "Please login first to add new recipe" });
+// }
+// try {
+//   const recipe = new Recipe(req.body);
+//   await recipe.save();
+//   res
+//     .status(201)
+//     .json({ message: `${req.body.title} posted successfully to the feed` });
+// } catch (error) {
+//   return res
+//     .status(500)
+//     .json({ message: "Unable to post recipe", error: error });
+//}
 
 exports.getMyRecipe = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];

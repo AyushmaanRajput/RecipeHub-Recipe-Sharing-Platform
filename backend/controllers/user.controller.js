@@ -5,8 +5,7 @@ exports.getSingleUser = async (req, res, next) => {
 };
 
 exports.getLoggedInUser = async (req, res, next) => {
-    const userId = req.body.userId;
-  
+    const userId = req.userId;
     try {
       const user = await User.findById(userId);
   
@@ -27,3 +26,4 @@ exports.updateUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   
 };
+

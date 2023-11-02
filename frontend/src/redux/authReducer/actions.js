@@ -75,6 +75,7 @@ export const loginUser = (userObj, toast, navigate) => async (dispatch) => {
         isClosable: true,
       });
       navigate("/");
+      
     }
   } catch (error) {
     console.log(error);
