@@ -8,6 +8,7 @@ const MiniCard_Recipes = () => {
         <div>
             <Card
                 maxW='md'
+                mb="5px"
                 direction={{ base: 'column', sm: 'row' }}
                 overflow='hidden'
                 variant='outline'
@@ -40,7 +41,7 @@ const MiniCard_Recipes = () => {
 const MiniCard_Chef = () => {
     return (
         <div>
-            <Card maxW='md'  p="10px">
+            <Card maxW='md'  p="10px" borderRadius="none" boxShadow="none">
                 <Flex justify="space-between"
                 align="center">
                     <Avatar src={<AiOutlineUser />} />
@@ -54,4 +55,23 @@ const MiniCard_Chef = () => {
     )
 }
 
-export { MiniCard_Chef, MiniCard_Recipes } 
+
+const FriendCard =()=>{
+    return(
+        <div>
+             <Card maxW='md'  p="10px" borderRadius="none" boxShadow="none">
+                <Flex justifyContent="flex-start"
+                align="center">
+                    <Avatar src={<AiOutlineUser />} />
+                    <Box>
+                        <Heading pl="20px" size='sm'>Name </Heading>
+                    </Box>
+                   
+                  
+                </Flex>
+            </Card>
+        </div>
+    )
+}
+
+export { MiniCard_Chef, MiniCard_Recipes ,FriendCard} 
