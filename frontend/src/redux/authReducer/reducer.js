@@ -6,6 +6,7 @@ import {
   LOGIN_USER_ERROR,
   LOGIN_USER_SUCCESS,
   RESET,
+  UPDATE_USER_DETAILS,
 } from "./actionTypes";
 import {
   GET_LOGGEDUSER_LOADING,
@@ -72,6 +73,11 @@ export const reducer = (state = initState, action) => {
         ...state,
         isLoading: false,
         isError: false,
+        loggedInUser: action.payload,
+      };
+    case UPDATE_USER_DETAILS: 
+      return {
+      ...state,
         loggedInUser: action.payload,
       };
     default:
