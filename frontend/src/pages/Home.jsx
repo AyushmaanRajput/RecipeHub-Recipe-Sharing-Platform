@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@chakra-ui/react";
-import { getUserData } from "../redux/authReducer/actions";
+import { getUserData, getUserRecipes } from "../redux/authReducer/actions";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -14,5 +14,13 @@ export const Home = () => {
       dispatch(getUserData(token, toast));
     }
   }, []);
+
+  useEffect(() => {
+    if(token) {
+      dispatch(getUserRecipes(user?._id, token));
+    }
+  }, [])
+
+
   return <div>Home</div>;
 };
