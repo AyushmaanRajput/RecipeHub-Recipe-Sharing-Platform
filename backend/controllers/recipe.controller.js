@@ -44,9 +44,40 @@ exports.addNewRecipe = async (req, res, next) => {
 //     .json({ message: "Unable to post recipe", error: error });
 //}
 
+exports.getAllRecipe = async (req, res, next) => {
+  try {
+    const { cuisine, rating, veg } = req.query;
+    const filter = {};
+
+    if (cuisine) {
+      // Filter by cuisine
+      filter.cuisine = { $in: JSON.parse(cuisine) };
+    }
+
+    if (veg === 'veg' || veg === 'non-veg') {
+      // Filter by veg or non-veg
+      filter.veg = veg === 'veg';
+    }
+
+    const sort = {};
+    if (rating) {
+      // Sort by rating in ascending or descending order
+      sort['rating.value'] = rating === 'asc' ? 1 : -1;
+    }
+
+    const recipes = await Recipe.find(filter).sort(sort);
+    res.status(200).json(recipes);
+  } catch (error) {
+    return res
+    .status(500)
+    .json({ message: "Failed to get recipes", error });
+  }
+}
+
 exports.getMyRecipe = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
-  let populate=req.params.populate;
+  let populate=req.query.populate;
+  const query = req.query;
   const { userId } = req;
   if(populate) {
     try {

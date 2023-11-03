@@ -19,6 +19,7 @@ const initState = {
   isAuth: false,
   token: null,
   loggedInUser: null,
+  recipes : null
 };
 
 export const reducer = (state = initState, action) => {
@@ -80,6 +81,13 @@ export const reducer = (state = initState, action) => {
       ...state,
         loggedInUser: action.payload,
       };
+    case "GET_USER_RECIPES" : {
+      console.log(action.payload, "recipes to be sent to redux");
+      return {
+      ...state,
+        recipes: action.payload,
+      };
+    }
     default:
       return state;
   }

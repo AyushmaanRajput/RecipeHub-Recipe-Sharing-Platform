@@ -11,7 +11,9 @@ router.use(auth);
 
 router.post("/add", upload.array("images"),recipeController.addNewRecipe);
 
-// router.get("/getMyRecipe", recipeController.getMyRecipe);
+router.get("/getMyRecipe", recipeController.getMyRecipe);
+
+router.get("/getAllRecipe", recipeController.getAllRecipe)
 
 // router.put("/updateMyRecipe/:id", recipeController.updateMyRecipe);
 
