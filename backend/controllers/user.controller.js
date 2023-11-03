@@ -80,6 +80,22 @@ exports.getRequests = async (req, res, next) => {
   }
 };
 
+exports.getFriends = async (req, res, next) => {
+  try {
+    const userId = req.userId; // Assuming you have the user's ID in the request
+
+    // Find the logged-in user to access their requests array
+    const user = await User.findOne({ _id: userId }).populate("friends");
+
+    // Get the list of users in the logged-in user's requests array
+    const friends = user.friends;
+
+    res.status(200).json({ message: "Requests List found", friends });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: "Something went wrong" });
+  }
+};
 exports.addFriendToUser = async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findOne({ _id: id });

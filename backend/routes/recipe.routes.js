@@ -9,11 +9,12 @@ const recipeController = require("../controllers/recipe.controller");
 
 router.use(auth);
 
-router.post("/add", upload.array("images"),recipeController.addNewRecipe);
+router.post("/add", upload.array("images"), recipeController.addNewRecipe);
 
+router.get("/feed", recipeController.getFeed);
 // router.get("/getMyRecipe", recipeController.getMyRecipe);
 
-// router.put("/updateMyRecipe/:id", recipeController.updateMyRecipe);
+router.patch("/update/:id", recipeController.updateMyRecipe);
 
 // router.delete("/deleteMyRecipe/:id", recipeController.deleteMyRecipe);
 

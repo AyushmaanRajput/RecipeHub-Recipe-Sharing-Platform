@@ -12,6 +12,7 @@ import {
   Text,
   HStack,
 } from "@chakra-ui/react";
+import { ChatIcon } from "@chakra-ui/icons";
 import React from "react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 
@@ -64,7 +65,9 @@ const MiniCard_Request = ({
         <Flex justify="space-between" align="center">
           <Avatar size="md" name={friend.name} src={friend.profileImage} />
           <Box flexGrow={1} px={4}>
-            <Heading size="sm" textAlign={"left"}>{friend.name}</Heading>
+            <Heading size="sm" textAlign={"left"}>
+              {friend.name}
+            </Heading>
           </Box>
           <Flex gap={2} justifyContent="flex-end" alignItems="center">
             {" "}
@@ -90,17 +93,18 @@ const MiniCard_Request = ({
   );
 };
 
-const FriendCard = () => {
+const FriendCard = ({ friend }) => {
   return (
     <div>
-      <Card maxW="md" p="10px" borderRadius="none" boxShadow="none">
-        <Flex justifyContent="flex-start" align="center">
-          <Avatar src={<AiOutlineUser />} />
-          <Box>
-            <Heading pl="20px" size="sm">
-              Name{" "}
+      <Card maxW="md" p="1rem" borderRadius="4px" boxShadow="none" bor>
+        <Flex justifyContent="space-between" alignItems="center" width="100%">
+          <Avatar src={friend.profileImage} />
+          <Flex justifyContent="space-between" alignItems="center" flexGrow={1}>
+            <Heading ml="20px" size="sm" justifySelf="flex-start">
+              {friend.name}
             </Heading>
-          </Box>
+            <ChatIcon cursor={'pointer'}/>
+          </Flex>
         </Flex>
       </Card>
     </div>

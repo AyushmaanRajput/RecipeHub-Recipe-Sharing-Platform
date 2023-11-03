@@ -8,6 +8,9 @@ import {
   GET_REQUESTSUSER_ERROR,
   GET_REQUESTSUSER_SUCCESS,
   GET_REQUESTSUSER_LOADING,
+  GET_FRIENDS_ERROR,
+  GET_FRIENDS_SUCCESS,
+  GET_FRIENDS_LOADING,
   POST_ACCEPTREQUEST_ERROR,
   POST_ACCEPTREQUEST_LOADING,
   POST_ACCEPTREQUEST_SUCCESS,
@@ -15,10 +18,15 @@ import {
   POST_REJECTREQUEST_LOADING,
   POST_REJECTREQUEST_SUCCESS,
 } from "./actionTypes";
+import {
+  POST_DISLIKE_SUCCESS,
+  POST_LIKE_SUCCESS,
+} from "../authReducer/actionTypes";
 import axios from "axios";
+import { getFeed } from "../recipeReducer/actions";
 
 export const updateUser =
-  (id, userObj, token, toast, type) => async (dispatch) => {
+  (id, userObj, token, toast, type, id2) => async (dispatch) => {
     try {
       dispatch({ type: POST_REQUEST_LOADING });
       // Make a patch request using Axios to update the user
@@ -41,7 +49,7 @@ export const updateUser =
           isClosable: true,
         });
       } else if (type == "accept") {
-        dispatch({ type: POST_ACCEPTREQUEST_SUCCESS, payload: id });
+        dispatch({ type: POST_ACCEPTREQUEST_SUCCESS, payload: id2 });
         toast({
           title: "Friend Request Accepted",
           status: "success",
@@ -49,11 +57,25 @@ export const updateUser =
           isClosable: true,
         });
       } else if (type === "reject") {
-        dispatch({ type: POST_REJECTREQUEST_SUCCESS, payload: id });
+        dispatch({ type: POST_REJECTREQUEST_SUCCESS, payload: id2 });
         toast({
           title: "Friend Request Rejected",
           status: "success",
           duration: 3000,
+          isClosable: true,
+        });
+      } else if (type === "like") {
+        toast({
+          title: "Post Liked",
+          status: "success",
+          duration: 500,
+          isClosable: true,
+        });
+      } else if (type === "dislike") {
+        toast({
+          title: "Post Liked",
+          status: "success",
+          duration: 500,
           isClosable: true,
         });
       }
@@ -66,7 +88,7 @@ export const updateUser =
     }
   };
 
-export const addToFriend=(id, userId, token) => async(dispatch)=>{
+export const addToFriend = (id, userId, token) => async (dispatch) => {
   try {
     dispatch({ type: POST_REQUEST_LOADING });
     // Make a patch request using Axios to update the user
@@ -80,10 +102,10 @@ export const addToFriend=(id, userId, token) => async(dispatch)=>{
       }
     );
     // console.log(response);
-  } catch(error) {
+  } catch (error) {
     console.log(error);
   }
-}
+};
 export const getAllNonFriends = (token) => async (dispatch) => {
   dispatch({ type: GET_NONFRIEND_LOADING });
   const config = {
@@ -102,7 +124,7 @@ export const getAllNonFriends = (token) => async (dispatch) => {
     users.forEach((user) => {
       user.profileImage = `${process.env.REACT_APP_API_URL}/${user.profileImage}`;
     });
-    console.log(users);
+    // console.log(users);
     dispatch({ type: GET_NONFRIEND_SUCCESS, payload: users });
   } catch (error) {
     console.log("Error fetching user data:", error);
@@ -122,16 +144,42 @@ export const getRequestsUsers = (token) => async (dispatch) => {
       `${process.env.REACT_APP_API_URL}/users/requests`,
       config
     );
-    console.log(response.data);
+    // console.log(response.data);
 
     const users = response.data.requestUsers;
     users.forEach((user) => {
       user.profileImage = `${process.env.REACT_APP_API_URL}/${user.profileImage}`;
     });
-    console.log(users);
+    // console.log(users);
     dispatch({ type: GET_REQUESTSUSER_SUCCESS, payload: users });
   } catch (error) {
     console.log("Error fetching user data:", error);
     dispatch({ type: GET_REQUESTSUSER_ERROR });
+  }
+};
+
+export const getFriends = (token) => async (dispatch) => {
+  dispatch({ type: GET_FRIENDS_LOADING });
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/users/friends`,
+      config
+    );
+    // console.log(response.data);
+
+    const users = response.data.friends;
+    users.forEach((user) => {
+      user.profileImage = `${process.env.REACT_APP_API_URL}/${user.profileImage}`;
+    });
+    // console.log(users);
+    dispatch({ type: GET_FRIENDS_SUCCESS, payload: users });
+  } catch (error) {
+    console.log("Error fetching user data:", error);
+    dispatch({ type: GET_FRIENDS_ERROR });
   }
 };

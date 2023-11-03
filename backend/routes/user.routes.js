@@ -10,6 +10,8 @@ router.use(auth);
 
 router.get("/requests", userController.getRequests);
 
+router.get("/friends", userController.getFriends);
+
 router.get("/notfriends", userController.getNotFriends);
 
 router.get("/:id", userController.getSingleUser);

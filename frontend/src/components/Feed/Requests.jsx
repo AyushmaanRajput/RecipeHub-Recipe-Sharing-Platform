@@ -24,10 +24,13 @@ export const Requests = () => {
   // console.log(requests, token);
 
   function acceptRequestHandler(id) {
+    console.log(id);
     const requestIds = requests.map((request) => request._id);
     const friendIds = friends.map((friend) => friend._id);
     const updatedRequests = requestIds.filter((requestId) => requestId !== id);
-    const updatedFriends = [...friendIds];
+    const updatedFriends = [...friendIds,id];
+    console.log(requestIds,friendIds);
+    console.log(updatedRequests,updatedFriends);
     dispatch(
       updateUser(
         loggedInUser._id,
@@ -35,6 +38,7 @@ export const Requests = () => {
         token,
         toast,
         "accept"
+        ,id
       )
     );
     dispatch(
@@ -50,7 +54,7 @@ export const Requests = () => {
     const requestIds = requests.map((request) => request._id);
     const updatedRequests = requestIds.filter((requestId) => requestId !== id);
     dispatch(
-      updateUser(id, { requests: updatedRequests }, token, toast, "reject")
+      updateUser(loggedInUser._id,{ requests: updatedRequests }, token, toast, "reject",id)
     );
   }
 

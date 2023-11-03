@@ -7,17 +7,29 @@ import {
   InputLeftElement,
   Stack,
   Divider,
+  useToast,
 } from "@chakra-ui/react";
-import React from "react";
-import FeedCard from "../components/Feed/FeedCard";
+import React, { useEffect } from "react";
+import { UserFeed } from "../components/Feed/UserFeed";
 import { FriendCard, MiniCard_Chef } from "../components/Feed/MiniCard";
 import styled from "@emotion/styled";
 import { BsSearch } from "react-icons/bs";
 import { NonFriends } from "../components/Feed/NonFriends";
 import { Requests } from "../components/Feed/Requests";
+import { useDispatch, useSelector } from "react-redux";
+import { getFriends } from "../redux/userReducer/actions";
 
 export const Feed = () => {
-  let arr = new Array(10).fill(1);
+  const dispatch = useDispatch();
+  const friends = useSelector((store) => store.userReducer.friends);
+  const token =
+    useSelector((store) => store.authReducer.token) ||
+    localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      dispatch(getFriends(token));
+    }
+  }, []);
   return (
     <DIV>
       <Flex spacing={8} direction="row">
@@ -36,16 +48,14 @@ export const Feed = () => {
             </InputLeftElement>
             <Input type="search" placeholder="Search" />
           </InputGroup>
-          <Heading size={"md"}>FRIENDS</Heading>
-          {arr.map((_, index) => {
-            return <FriendCard key={index} />;
+          <Heading size={"md"} my={4}>
+            Your Friends
+          </Heading>
+          {friends.map((friend, index) => {
+            return <FriendCard friend={friend} key={index} />;
           })}
         </Box>
-        <Box p={5} w="50%" h="90vh" overflowY="scroll" className="scroll">
-          {arr.map((_, index) => {
-            return <FeedCard key={index} />;
-          })}
-        </Box>
+        <UserFeed />
         <Box
           p={5}
           w="30%"
