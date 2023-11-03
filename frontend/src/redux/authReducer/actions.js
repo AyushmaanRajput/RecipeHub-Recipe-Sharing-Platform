@@ -188,3 +188,37 @@ export const updateUserDetails = (id, newData, headers, toast) => (dispatch) => 
     });
 };
 
+// Get user recipes
+export const getUserRecipes = (id, token) => (dispatch) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  axios.get(`${process.env.REACT_APP_API_URL}/recipe/getMyRecipe?populate=recipes`, config)
+    .then((response) => {
+      console.log(response.data.recipes);
+      dispatch({
+        type: "GET_USER_RECIPES",
+        payload: response.data.recipes,
+      });
+    })
+    .catch((error) => {
+      console.error('Error fetching user recipes:', error);
+    });
+};
+
+export const getAllRecipes = (token) => {
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios.get(`${process.env.REACT_APP_API_URL}/recipe/getAllRecipe`, config).then((res) => {
+    console.log(res.data);
+  }).catch((err) => {
+    console.log(err)
+  })
+}

@@ -52,8 +52,12 @@ const tags = [
   "Dessert",
   "Spicy",
   "Quick",
+  "Pasta",
+  "Sea food",
+  "Chicken",
   "Main Dish",
   "Appetizer",
+  "Curry",
   "Salad",
   "Soup",
 ];

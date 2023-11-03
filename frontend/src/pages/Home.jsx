@@ -14,10 +14,11 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { getUserData } from "../redux/authReducer/actions";
 import styled from "styled-components";
 import { Homecard } from "../components/home/HomeCard";
 import InfoCard from "../components/home/Card";
+import { useToast } from "@chakra-ui/react";
+import { getUserData, getUserRecipes } from "../redux/authReducer/actions";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,11 @@ export const Home = () => {
       dispatch(getUserData(token, toast));
     }
   }, []);
+   useEffect(() => {
+    if(token) {
+      dispatch(getUserRecipes(user?._id, token));
+    }
+  }, [])
   return (
     <DIV>
       <Box textAlign="center" className="cover">

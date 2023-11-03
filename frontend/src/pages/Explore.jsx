@@ -25,7 +25,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getAllRecipes } from "../redux/authReducer/actions";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const dummyRecipeData = [
   {
@@ -201,12 +204,29 @@ const dummyRecipeData = [
 export const Explore = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [recipe, setRecipe] = useState(dummyRecipeData);
+  const [recipe, setRecipe] = useState([]);
   const [save, setSave] = useState(false);
+  const [rating, setRating] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+  const handleRatingChange = (event) => {
+    setRating(event.target.value);
+  };
+  const token =
+    useSelector((store) => store.authReducer.token) ||
+    localStorage.getItem("token");
 
   const handleSave = () => {
     setSave(!save);
   };
+
+  const handleFilter = () => {
+    const data = {
+      cuisine: selectedCuisines,
+      rating: rating,
+      veg : selectedOption
+    }
+    console.log(data)
+  }
 
   // Function to set cuisine multiple option
   const handleCuisineChange = (e) => {
@@ -221,14 +241,29 @@ export const Explore = () => {
     setSelectedCuisines(newCuisines);
   };
 
-  // Function to remove cuisine 
+  // Function to remove cuisine
   const handleCuisineRemove = (cuisine) => {
     const updatedCuisines = selectedCuisines.filter((item) => item !== cuisine);
     console.log("Updated cuisines: " + updatedCuisines);
     setSelectedCuisines(updatedCuisines);
   };
 
-  console.log(selectedCuisines);
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  
+    axios.get(`${process.env.REACT_APP_API_URL}/recipe/getAllRecipe`, config).then((res) => {
+      console.log(res.data);
+      setRecipe(res.data);
+    }).catch((err) => {
+      console.log(err)
+    })
+  }, []);
+
+  console.log(recipe, "recipe")
 
   // All types of cuisine
   const cuisines = [
@@ -240,7 +275,7 @@ export const Explore = () => {
     "Greek",
     "Filipino",
     "Japanese",
-    "Other"
+    "Other",
   ];
 
   return (
@@ -317,17 +352,25 @@ export const Explore = () => {
               <ModalCloseButton />
               <ModalBody>
                 {/* Options for rating */}
-                <Select placeholder="Rating">
+                <Select
+                  value={rating}
+                  onChange={handleRatingChange}
+                  placeholder="Rating"
+                >
                   <option value="asc">Ascending order</option>
                   <option value="desc">Descending order</option>
                 </Select>
                 {/* Options for selecting veg / non-veg recipe */}
-                <RadioGroup marginY="5">
+                <RadioGroup
+                  marginY="5"
+                  value={selectedOption}
+                  onChange={setSelectedOption}
+                >
                   <Stack spacing={5} direction="row">
-                    <Radio colorScheme="green" value="1">
+                    <Radio colorScheme="green" value="veg">
                       Only Veg
                     </Radio>
-                    <Radio colorScheme="red" value="2">
+                    <Radio colorScheme="red" value="non-veg">
                       Only Non-veg
                     </Radio>
                   </Stack>
@@ -345,7 +388,12 @@ export const Explore = () => {
                   ))}
                 </Select>
                 {/* This will show the selected cuisines */}
-                <HStack display={"flex"} flexWrap={"wrap"} paddingY="2" spacing="2">
+                <HStack
+                  display={"flex"}
+                  flexWrap={"wrap"}
+                  paddingY="2"
+                  spacing="2"
+                >
                   {selectedCuisines.map((cuisine) => (
                     <Tag key={cuisine} size="md">
                       {cuisine}
@@ -360,7 +408,7 @@ export const Explore = () => {
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
                   Close
                 </Button>
-                <Button variant="ghost">Apply</Button>
+                <Button variant="ghost" onClick={handleFilter}>Apply</Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
@@ -382,7 +430,7 @@ export const Explore = () => {
                 position="relative"
               >
                 <Image
-                  src={ele.image[0]}
+                  src={`http://localhost:8080/${ele.images[0]}`}
                   alt={ele.title}
                   boxSize="25%"
                   objectFit="cover"
@@ -459,4 +507,3 @@ export const Explore = () => {
     </>
   );
 };
-

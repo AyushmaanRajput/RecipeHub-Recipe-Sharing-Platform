@@ -7,6 +7,7 @@ import { Login } from "../pages/Login";
 import { SignUp } from "../pages/SignUp";
 import { PrivateRoute } from "./PrivateRoute";
 import { AddRecipeModal } from "../pages/AddRecipeModal";
+import SingleRecipe from "../pages/SingleRecipe";
 
 export const AllRoutes = () => {
   return (
@@ -38,6 +39,7 @@ export const AllRoutes = () => {
         }
       ></Route>
       <Route path="/signup" element={<SignUp />}></Route>
+      <Route path="/singleRecipe" element={<SingleRecipe />}></Route>
       <Route path="/login" element={<Login />}></Route>
     </Routes>
   );
