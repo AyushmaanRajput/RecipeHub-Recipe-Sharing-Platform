@@ -13,6 +13,9 @@ router.post("/add", upload.array("images"), recipeController.addNewRecipe);
 
 router.get("/feed", recipeController.getFeed);
 // router.get("/getMyRecipe", recipeController.getMyRecipe);
+router.get("/getMyRecipe", recipeController.getMyRecipe);
+
+router.get("/getAllRecipe", recipeController.getAllRecipe)
 
 router.patch("/update/:id", recipeController.updateMyRecipe);
 

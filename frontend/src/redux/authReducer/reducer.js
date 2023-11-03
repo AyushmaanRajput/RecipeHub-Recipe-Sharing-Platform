@@ -21,6 +21,7 @@ const initState = {
   isAuth: false,
   token: null,
   loggedInUser: null,
+  recipes : null
 };
 
 export const reducer = (state = initState, action) => {
@@ -99,6 +100,12 @@ export const reducer = (state = initState, action) => {
         ...state,
         loggedInUser: { ...state.loggedInUser, likedRecipes: newLikedRecipes1 },
       };
+    case "GET_USER_RECIPES" : {
+      return {
+      ...state,
+        recipes: action.payload,
+      };
+    }
     default:
       return state;
   }

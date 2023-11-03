@@ -16,7 +16,6 @@ import {
   TabPanel,
   TabPanels,
   Tooltip,
-  Icon,
   useDisclosure,
   Modal,
   ModalOverlay,
@@ -27,7 +26,6 @@ import {
   ModalCloseButton,
   Editable,
   EditablePreview,
-  Input,
   useEditableControls,
   ButtonGroup,
   IconButton,
@@ -35,13 +33,10 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
-import { AiOutlineLike, AiOutlineMessage } from "react-icons/ai";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData, updateUserDetails } from "../redux/authReducer/actions";
 import { useToast } from "@chakra-ui/react";
-import { Heading } from "@chakra-ui/react";
-import axios from "axios";
 
 const dummyRecipeData = [
   {
@@ -883,7 +878,7 @@ const dummyRecipeData = [
     ],
     rating: 4.7,
     macros: { calories: 220, carbs: 15, fats: 16, proteins: 8 },
-  }
+  },
 ];
 
 export const Account = () => {
@@ -893,34 +888,36 @@ export const Account = () => {
   const token =
     useSelector((store) => store.authReducer.token) ||
     localStorage.getItem("token");
-    console.log(token)
+  // console.log(token)
   const user = useSelector((store) => store.authReducer.loggedInUser);
-  console.log(user.profileImage);
+  const recipes = useSelector((store) => store.authReducer.recipes);
+  console.log(recipes);
   const [data, setData] = useState(dummyRecipeData);
   const [userName, setUserName] = useState(user?.name);
   const [userBio, setUserBio] = useState(user?.bio);
   const [userCity, setUserCity] = useState(user?.city);
 
-  // Function to edit profile 
+  // Function to edit profile
   const handleEditProfile = () => {
-    const newUserName = userName || user?.name
-    const newUserBio = userBio || user?.bio
-    const newUserCity = userCity || user?.city
-    const relativePath = user?.profileImage.replace(/http:\/\/localhost:8080\//g, '');
+    const newUserName = userName || user?.name;
+    const newUserBio = userBio || user?.bio;
+    const newUserCity = userCity || user?.city;
+    const relativePath = user?.profileImage.replace(
+      /http:\/\/localhost:8080\//g,
+      ""
+    );
 
-const data = {
-  name: newUserName,
-  bio: newUserBio,
-  city: newUserCity,
-  profileImage: relativePath,
-};
-    console.log(data)
+    const data = {
+      name: newUserName,
+      bio: newUserBio,
+      city: newUserCity,
+      profileImage: relativePath,
+    };
+    console.log("Data that i wanter to get updated", data);
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-
-    dispatch(updateUserDetails(user?._id, data, headers, toast))
-    
+    dispatch(updateUserDetails(user?._id, data, headers, toast));
   };
 
   useEffect(() => {
@@ -931,9 +928,6 @@ const data = {
 
   return (
     <Container bgColor={"#EEF2F7"} maxW="full" height={"100vh"} p={0}>
-
-
-
       {/* Modal for editting profile */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -1012,9 +1006,14 @@ const data = {
           flexDirection={"row"}
         >
           {/* User Profile Info */}
-          <Box display={"flex"} justifyContent={"center"} alignItems={"center"} p={0} >
+          <Box
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            p={0}
+          >
             <Image
-              src={ user?.profileImage}
+              src={user?.profileImage}
               alt="Profile picture"
               borderRadius="full"
               // boxSize={"50%"}
@@ -1062,8 +1061,6 @@ const data = {
           </Box>
         </Box>
 
-
-
         {/* User Posts and others */}
         <Box w={"70%"} m={"auto"}>
           {/* Grid View of Images */}
@@ -1076,18 +1073,19 @@ const data = {
             <TabPanels>
               <TabPanel>
                 <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-                  {data.length > 0 &&
-                    data.map((ele, index) => (
-                      <Tooltip label={`Likes: 35, Comments: 77`} key={index}>
+                  {recipes?.length > 0 &&
+                    recipes.map((ele, index) => (
+                      <Tooltip label={`Likes: ${ele?.likes?.length}, Comments: ${ele?.comments?.length}`} key={index}>
                         <div>
                           <Image
-                            src={ele.image[0]}
+                            src={`http://localhost:8080/${ele.images[0]}`}
                             alt="Recipe Image"
                             boxSize="100%"
                             objectFit="cover"
                           />
                         </div>
                       </Tooltip>
+                      // <h1>{ele.title}</h1>
                     ))}
                 </Grid>
               </TabPanel>
