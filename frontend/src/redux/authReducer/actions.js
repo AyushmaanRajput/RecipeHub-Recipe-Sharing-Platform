@@ -6,6 +6,7 @@ import {
   LOGIN_USER_ERROR,
   LOGIN_USER_SUCCESS,
   RESET,
+  UPDATE_USER_DETAILS,
 } from "./actionTypes";
 import {
   GET_LOGGEDUSER_LOADING,
@@ -155,3 +156,35 @@ export const getUserData = (token, toast) => async (dispatch) => {
     });
   }
 };
+
+// update user details
+export const updateUserDetails = (id, newData, headers, toast) => (dispatch) => {
+  axios
+    .patch(`${process.env.REACT_APP_API_URL}/users/update/${id}`, newData, {
+      headers: headers,
+    })
+    .then((res) => {
+      console.log(res.data);
+      dispatch({
+        type: UPDATE_USER_DETAILS,
+        payload: res.data,
+      });
+      toast({
+        title: "Your data was successfully updated",
+        description: `${res.data.message}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    })
+    .catch((err) => {
+      toast({
+        title: "Your data was successfully updated",
+        description: `${err.response.data.message}`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    });
+};
+

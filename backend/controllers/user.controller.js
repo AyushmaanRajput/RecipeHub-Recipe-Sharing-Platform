@@ -19,18 +19,16 @@ exports.getLoggedInUser = async (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  const userId = req.body.userId;
+  const userId = req.userId;
   const { id } = req.params;
-  console.log("userID", userId, "Id", id);
   try {
-    const user = await User.findOne({ _id: userId });
-    console.log(user)
-    res.status(200).json(user);
+    // const user = await User.findOne({ _id: userId });
+    const updatedUser = await User.findByIdAndUpdate({ _id: id }, req.body, { new: true });
+    res.status(200).json(updatedUser);
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 exports.deleteUser = async (req, res, next) => {};

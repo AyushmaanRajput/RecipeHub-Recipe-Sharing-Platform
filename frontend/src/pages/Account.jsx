@@ -38,7 +38,7 @@ import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { AiOutlineLike, AiOutlineMessage } from "react-icons/ai";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../redux/authReducer/actions";
+import { getUserData, updateUserDetails } from "../redux/authReducer/actions";
 import { useToast } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
 import axios from "axios";
@@ -893,39 +893,34 @@ export const Account = () => {
   const token =
     useSelector((store) => store.authReducer.token) ||
     localStorage.getItem("token");
+    console.log(token)
   const user = useSelector((store) => store.authReducer.loggedInUser);
-  console.log(user);
+  console.log(user.profileImage);
   const [data, setData] = useState(dummyRecipeData);
   const [userName, setUserName] = useState(user?.name);
   const [userBio, setUserBio] = useState(user?.bio);
   const [userCity, setUserCity] = useState(user?.city);
 
-  // Function to edit profile
+  // Function to edit profile 
   const handleEditProfile = () => {
     const newUserName = userName || user?.name
     const newUserBio = userBio || user?.bio
     const newUserCity = userCity || user?.city
-    console.log(newUserName, newUserBio, newUserCity)
-    const data = {
-      newUserName,
-      newUserBio,
-      newUserCity
-    }
+    const relativePath = user?.profileImage.replace(/http:\/\/localhost:8080\//g, '');
 
+const data = {
+  name: newUserName,
+  bio: newUserBio,
+  city: newUserCity,
+  profileImage: relativePath,
+};
+    console.log(data)
     const headers = {
       Authorization: `Bearer ${token}`,
     };
 
-    axios
-  .patch(`${process.env.REACT_APP_API_URL}/auth/patch/${user?._id}`, data, {
-    headers: headers,
-  })
-  .then((res) => {
-    console.log(res.data);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+    dispatch(updateUserDetails(user?._id, data, headers, toast))
+    
   };
 
   useEffect(() => {
@@ -1019,7 +1014,7 @@ export const Account = () => {
           {/* User Profile Info */}
           <Box display={"flex"} justifyContent={"center"} alignItems={"center"} p={0} >
             <Image
-              src={user?.profileImage}
+              src={ user?.profileImage}
               alt="Profile picture"
               borderRadius="full"
               // boxSize={"50%"}
