@@ -1,77 +1,110 @@
-import { Avatar, Box, Button, Card, CardBody, CardFooter, Flex, Heading, IconButton, Image, Stack, Text } from '@chakra-ui/react'
-import React from 'react'
-import { BsBookmark } from 'react-icons/bs'
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Flex,
+  Heading,
+  IconButton,
+  Image,
+  Stack,
+  Text,
+  HStack,
+} from "@chakra-ui/react";
+import React from "react";
+import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 
-import { AiOutlineUser } from 'react-icons/ai'
-const MiniCard_Recipes = () => {
-    return (
-        <div>
-            <Card
-                maxW='md'
-                mb="5px"
-                direction={{ base: 'column', sm: 'row' }}
-                overflow='hidden'
-                variant='outline'
-                p="10px"
+import { AiOutlineUser } from "react-icons/ai";
+const MiniCard_Friends = ({ userId, friend, addRequestHandler }) => {
+  return (
+    <Card
+      maxW="md"
+      mb="10px"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+    >
+      <Flex direction={{ base: "column", sm: "row" }} alignItems="center" p={4}>
+        <Avatar size="md" name={friend.name} src={friend.profileImage} />
+        <CardBody ml={4}>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Heading size="md">{friend.name}</Heading>
+            {!friend.requests.includes(userId) ? (
+              <Button
+                colorScheme="teal"
+                size="sm"
+                onClick={() => addRequestHandler(friend._id, friend.requests)}
+              >
+                Add Friend
+              </Button>
+            ) : (
+              <Button colorScheme="teal" size="sm" disabled>
+                Friend Request Sent
+              </Button>
+            )}
+          </Flex>
+          <Text mt={2} noOfLines={2} isTruncated>
+            {friend.bio.slice(0, 40) + "..."}
+          </Text>
+        </CardBody>
+      </Flex>
+    </Card>
+  );
+};
 
+const MiniCard_Request = ({
+  friend,
+  acceptRequestHandler,
+  rejectRequestHandler,
+}) => {
+  return (
+    <div>
+      <Card maxW="md" p="10px" borderRadius="none" boxShadow="none">
+        <Flex justify="space-between" align="center">
+          <Avatar size="md" name={friend.name} src={friend.profileImage} />
+          <Box flexGrow={1} px={4}>
+            <Heading size="sm" textAlign={"left"}>{friend.name}</Heading>
+          </Box>
+          <Flex gap={2} justifyContent="flex-end" alignItems="center">
+            {" "}
+            <Button
+              colorScheme="teal"
+              size="sm"
+              onClick={() => acceptRequestHandler(friend._id)}
             >
-                <Image
-                    objectFit='cover'
-                    maxW={{ base: '100%', sm: '100px' }}
-                    maxH={{ sm: '80px' }}
-                    borderRadius="5px"
-                    src='https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-                    alt='Caffe Latte'
-                />
+              Accept
+            </Button>
+            <Button
+              variant="outline"
+              colorScheme="teal"
+              size="sm"
+              onClick={() => rejectRequestHandler(friend._id)}
+            >
+              Reject
+            </Button>
+          </Flex>
+        </Flex>
+      </Card>
+    </div>
+  );
+};
 
-                <Stack>
-                    <CardBody>
-                        <Heading size='md'>Name of recipe</Heading>
+const FriendCard = () => {
+  return (
+    <div>
+      <Card maxW="md" p="10px" borderRadius="none" boxShadow="none">
+        <Flex justifyContent="flex-start" align="center">
+          <Avatar src={<AiOutlineUser />} />
+          <Box>
+            <Heading pl="20px" size="sm">
+              Name{" "}
+            </Heading>
+          </Box>
+        </Flex>
+      </Card>
+    </div>
+  );
+};
 
-                        <Text >
-                            By Name Who is Posted
-                        </Text>
-                    </CardBody>
-                </Stack>
-            </Card>
-        </div>
-    )
-}
-
-const MiniCard_Chef = () => {
-    return (
-        <div>
-            <Card maxW='md'  p="10px" borderRadius="none" boxShadow="none">
-                <Flex justify="space-between"
-                align="center">
-                    <Avatar src={<AiOutlineUser />} />
-                    <Box>
-                        <Heading size='sm'>Name of who is posted</Heading>
-                    </Box>
-                    <Button>Follow</Button>
-                </Flex>
-            </Card>
-        </div>
-    )
-}
-
-
-const FriendCard =()=>{
-    return(
-        <div>
-             <Card maxW='md'  p="10px" borderRadius="none" boxShadow="none">
-                <Flex justifyContent="flex-start"
-                align="center">
-                    <Avatar src={<AiOutlineUser />} />
-                    <Box>
-                        <Heading pl="20px" size='sm'>Name </Heading>
-                    </Box>
-                   
-                  
-                </Flex>
-            </Card>
-        </div>
-    )
-}
-
-export { MiniCard_Chef, MiniCard_Recipes ,FriendCard} 
+export { MiniCard_Request, MiniCard_Friends, FriendCard };

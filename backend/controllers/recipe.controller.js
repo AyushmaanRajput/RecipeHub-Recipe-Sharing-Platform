@@ -1,4 +1,5 @@
 const Recipe = require("../models/Recipe.model");
+const User = require("../models/User.model");
 
 exports.addNewRecipe = async (req, res, next) => {
   // console.log(req.body, req.files, req.userId);
@@ -15,6 +16,9 @@ exports.addNewRecipe = async (req, res, next) => {
       images: images,
     });
     await newRecipe.save();
+    let user = await User.findOne({ _id: req.userId });
+    let userRecipes = [...user.recipes, newRecipe._id];
+    await User.findByIdAndUpdate(req.userId, { recipes: userRecipes });
     res.status(201).json({
       message: "Recipe created successfully",
       recipe: newRecipe,
@@ -42,17 +46,19 @@ exports.addNewRecipe = async (req, res, next) => {
 
 exports.getMyRecipe = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    res.status(201).json({ message: "Please login first to get your recipe" });
-  }
-  const { userId } = req.body;
-  try {
-    const recipe = await Recipe.find({ _id: userId });
-    res.status(201).json(recipe);
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Failed to get your poster recipe", error });
+  let populate=req.params.populate;
+  const { userId } = req;
+  if(populate) {
+    try {
+      const recipe = await User.findOne({ _id: userId }).populate(populate);
+      res.status(201).json(recipe);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Failed to get your poster recipe", error });
+    }
+  }else{
+    res.status(404).json({ message: "Pass a parameter"});
   }
 };
 

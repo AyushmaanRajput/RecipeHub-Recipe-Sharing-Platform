@@ -12,14 +12,6 @@ export const Home = () => {
   useEffect(() => {
     if (!user && token) {
       dispatch(getUserData(token, toast));
-    } else {
-      toast({
-        title: "Failed To Load User Details",
-        description: `Please Login Again`,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
     }
   }, []);
   return <div>Home</div>;

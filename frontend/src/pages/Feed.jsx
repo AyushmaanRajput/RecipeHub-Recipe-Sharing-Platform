@@ -6,16 +6,15 @@ import {
   InputGroup,
   InputLeftElement,
   Stack,
+  Divider,
 } from "@chakra-ui/react";
 import React from "react";
 import FeedCard from "../components/Feed/FeedCard";
-import {
-  FriendCard,
-  MiniCard_Chef,
-  MiniCard_Recipes,
-} from "../components/Feed/MiniCard";
+import { FriendCard, MiniCard_Chef } from "../components/Feed/MiniCard";
 import styled from "@emotion/styled";
 import { BsSearch } from "react-icons/bs";
+import { NonFriends } from "../components/Feed/NonFriends";
+import { Requests } from "../components/Feed/Requests";
 
 export const Feed = () => {
   let arr = new Array(10).fill(1);
@@ -31,16 +30,11 @@ export const Feed = () => {
           backgroundColor={"white"}
           boxShadow="rgba(0, 0, 0, 0.05) 0px 0px 0px 1px"
         >
-          <InputGroup 
-          mb="10px">
-            <InputLeftElement 
-            pointerEvents="none">
-              <BsSearch 
-              color="gray.300" />
+          <InputGroup mb="10px">
+            <InputLeftElement pointerEvents="none">
+              <BsSearch color="gray.300" />
             </InputLeftElement>
-            <Input 
-            type="search" 
-            placeholder="Search" />
+            <Input type="search" placeholder="Search" />
           </InputGroup>
           <Heading size={"md"}>FRIENDS</Heading>
           {arr.map((_, index) => {
@@ -60,18 +54,15 @@ export const Feed = () => {
           overflowY="scroll"
           className="scroll"
         >
-          <Heading size={"md"} mb={"10px"}>
-            Recipes of the week
+          <Heading size={"md"} mb={"2rem"}>
+            Find New Friends
           </Heading>
-          <MiniCard_Recipes />
-          <MiniCard_Recipes />
-          <MiniCard_Recipes />
-          <Heading size={"md"} mb={"10px"}>
-            Featured Chef
+          <NonFriends></NonFriends>
+          <Divider my={10} />
+          <Heading size={"md"} mb={"2rem"}>
+            People Who Want To Know You
           </Heading>
-          <MiniCard_Chef />
-          <MiniCard_Chef />
-          <MiniCard_Chef />
+          <Requests></Requests>
         </Box>
       </Flex>
     </DIV>
