@@ -5,6 +5,8 @@ import {
   LOGIN_USER_LOADING,
   LOGIN_USER_ERROR,
   LOGIN_USER_SUCCESS,
+  POST_DISLIKE_SUCCESS,
+  POST_LIKE_SUCCESS,
   RESET,
   UPDATE_USER_DETAILS,
 } from "./actionTypes";
@@ -64,7 +66,7 @@ export const loginUser = (userObj, toast, navigate) => async (dispatch) => {
     );
 
     // Handle the server response here
-    console.log(response);
+    // console.log(response);
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
       dispatch({ type: LOGIN_USER_SUCCESS, payload: response.data.token });

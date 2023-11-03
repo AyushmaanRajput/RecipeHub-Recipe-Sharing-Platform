@@ -28,21 +28,6 @@ exports.addNewRecipe = async (req, res, next) => {
     res.status(500).json({ message: "Recipe creation failed" });
   }
 };
-// const token = req.headers.authorization?.split(" ")[1];
-// if (!token) {
-//   res.status(201).json({ message: "Please login first to add new recipe" });
-// }
-// try {
-//   const recipe = new Recipe(req.body);
-//   await recipe.save();
-//   res
-//     .status(201)
-//     .json({ message: `${req.body.title} posted successfully to the feed` });
-// } catch (error) {
-//   return res
-//     .status(500)
-//     .json({ message: "Unable to post recipe", error: error });
-//}
 
 exports.getAllRecipe = async (req, res, next) => {
   try {
@@ -79,7 +64,7 @@ exports.getMyRecipe = async (req, res, next) => {
   let populate=req.query.populate;
   const query = req.query;
   const { userId } = req;
-  if(populate) {
+  if (populate) {
     try {
       const recipe = await User.findOne({ _id: userId }).populate(populate);
       res.status(201).json(recipe);
@@ -88,20 +73,15 @@ exports.getMyRecipe = async (req, res, next) => {
         .status(500)
         .json({ message: "Failed to get your poster recipe", error });
     }
-  }else{
-    res.status(404).json({ message: "Pass a parameter"});
+  } else {
+    res.status(404).json({ message: "Pass a parameter" });
   }
 };
 
 exports.updateMyRecipe = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    res
-      .status(201)
-      .json({ message: "Please login first to update your recipe" });
-  }
-  const { userId } = req.body;
+  const { userId } = req;
   const { id } = req.params;
+  console.log("in update recipe request", userId, id, req.body);
   try {
     const post = await Recipe.findOne({ _id: id });
     if (post.userId != userId) {
@@ -109,8 +89,10 @@ exports.updateMyRecipe = async (req, res, next) => {
         .status(400)
         .json({ message: "You are not authorized to update this recipe" });
     }
-    await Recipe.findOneAndUpdate({ _id: id }, req.body, { new: true });
-    res.status(201).json({ message: "Recipe updated successfully" });
+    let updated = await Recipe.findByIdAndUpdate(id, req.body, { new: true });
+    res
+      .status(200)
+      .json({ message: "Recipe updated successfully", updatedRecipe: updated });
   } catch (error) {
     return res
       .status(500)
@@ -140,5 +122,26 @@ exports.deleteMyRecipe = async (req, res, next) => {
     return res
       .status(500)
       .json({ message: "Failed to delete your poster recipe", error });
+  }
+};
+
+exports.getFeed = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    // Find recipes that belong to the logged-in user and their friends
+    const user = await User.findById(userId);
+    const friendIds = user.friends.map((friend) => friend._id);
+
+    const recipes = await Recipe.find({
+      $or: [{ userId: userId }, { userId: { $in: friendIds } }],
+    })
+      .sort({ _id: -1 })
+      .populate("userId"); // Populate the 'userId' field with user data
+
+    res.status(200).json({ message: "User Feed Found", feed: recipes });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: "Couldn't fetch user feed" });
   }
 };

@@ -5,6 +5,8 @@ import {
   LOGIN_USER_LOADING,
   LOGIN_USER_ERROR,
   LOGIN_USER_SUCCESS,
+  POST_DISLIKE_SUCCESS,
+  POST_LIKE_SUCCESS,
   RESET,
   UPDATE_USER_DETAILS,
 } from "./actionTypes";
@@ -76,13 +78,29 @@ export const reducer = (state = initState, action) => {
         isError: false,
         loggedInUser: action.payload,
       };
-    case UPDATE_USER_DETAILS: 
+    case UPDATE_USER_DETAILS:
       return {
-      ...state,
+        ...state,
         loggedInUser: action.payload,
       };
+    case POST_LIKE_SUCCESS:
+      let newLikedRecipes = [...state.loggedInUser.likedRecipes];
+      if (!state.loggedInUser.likedRecipes.includes(action.payload)) {
+        newLikedRecipes.push(action.payload);
+      }
+      return {
+        ...state,
+        loggedInUser: { ...state.loggedInUser, likedRecipes: newLikedRecipes },
+      };
+    case POST_DISLIKE_SUCCESS:
+      let newLikedRecipes1 = [...state.loggedInUser.likedRecipes].filter(
+        (rec) => rec != action.payload
+      );
+      return {
+        ...state,
+        loggedInUser: { ...state.loggedInUser, likedRecipes: newLikedRecipes1 },
+      };
     case "GET_USER_RECIPES" : {
-      console.log(action.payload, "recipes to be sent to redux");
       return {
       ...state,
         recipes: action.payload,

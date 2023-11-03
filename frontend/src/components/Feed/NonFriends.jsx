@@ -21,7 +21,7 @@ export const NonFriends = () => {
   }, []);
 
   function addRequestHandler(id, receiversRequest) {
-    console.log(id, receiversRequest);
+    // console.log(id, receiversRequest);
     if (token) {
       if (!receiversRequest.includes(loggedInUser._id)) {
         receiversRequest.push(loggedInUser._id);

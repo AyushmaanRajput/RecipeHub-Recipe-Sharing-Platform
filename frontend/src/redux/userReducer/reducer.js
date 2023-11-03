@@ -8,6 +8,9 @@ import {
   GET_REQUESTSUSER_ERROR,
   GET_REQUESTSUSER_SUCCESS,
   GET_REQUESTSUSER_LOADING,
+  GET_FRIENDS_ERROR,
+  GET_FRIENDS_SUCCESS,
+  GET_FRIENDS_LOADING,
   POST_ACCEPTREQUEST_ERROR,
   POST_ACCEPTREQUEST_LOADING,
   POST_ACCEPTREQUEST_SUCCESS,
@@ -85,6 +88,25 @@ export const reducer = (state = initState, action) => {
         isError: false,
         requests: [...action.payload],
       };
+    case GET_FRIENDS_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+    case GET_FRIENDS_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    case GET_FRIENDS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        friends: [...action.payload],
+      };
     case POST_ACCEPTREQUEST_LOADING:
       return {
         ...state,
@@ -98,15 +120,18 @@ export const reducer = (state = initState, action) => {
         isError: true,
       };
     case POST_ACCEPTREQUEST_SUCCESS:
+      console.log(action.payload);
       let filteredRequests = [...state.requests].filter(
         (req) => req._id != action.payload
       );
+      console.log(filteredRequests);
       let addedFriends = [...state.friends];
       for (let i = 0; i < state.requests.length; i++) {
         if (state.requests[i]._id == action.payload) {
           addedFriends.push(state.requests[i]);
         }
       }
+      console.log(addedFriends);
       return {
         ...state,
         isLoading: false,
