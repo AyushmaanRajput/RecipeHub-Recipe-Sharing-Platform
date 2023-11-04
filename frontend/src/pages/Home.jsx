@@ -17,7 +17,6 @@ import {
 import styled from "styled-components";
 import { Homecard } from "../components/home/HomeCard";
 import InfoCard from "../components/home/Card";
-import { useToast } from "@chakra-ui/react";
 import { getUserData, getUserRecipes } from "../redux/authReducer/actions";
 
 export const Home = () => {
