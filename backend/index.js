@@ -9,6 +9,7 @@ const connection = require("./connection");
 const authRoutes = require("./routes/auth.routes");
 const recipeRoutes = require("./routes/recipe.routes");
 const userRoutes = require("./routes/user.routes");
+const commentRoutes = require("./routes/comment.routes");
 
 // // Middlewares
 const upload = require("./middlewares/upload.middleware");
@@ -27,6 +28,7 @@ app.post("/upload", upload.array("file", 5), (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/recipe", recipeRoutes);
 app.use("/users", userRoutes);
+app.use("/comment", commentRoutes);
 
 app.listen(process.env.PORT, async () => {
   try {

@@ -891,7 +891,7 @@ export const Account = () => {
   // console.log(token)
   const user = useSelector((store) => store.authReducer.loggedInUser);
   const recipes = useSelector((store) => store.authReducer.recipes);
-  console.log(recipes);
+  console.log(user.savedRecipes, recipes);
   const [data, setData] = useState(dummyRecipeData);
   const [userName, setUserName] = useState(user?.name);
   const [userBio, setUserBio] = useState(user?.bio);
@@ -1075,7 +1075,10 @@ export const Account = () => {
                 <Grid templateColumns="repeat(3, 1fr)" gap={2}>
                   {recipes?.length > 0 &&
                     recipes.map((ele, index) => (
-                      <Tooltip label={`Likes: ${ele?.likes?.length}, Comments: ${ele?.comments?.length}`} key={index}>
+                      <Tooltip
+                        label={`Likes: ${ele?.likes?.length}, Comments: ${ele?.comments?.length}`}
+                        key={index}
+                      >
                         <div>
                           <Image
                             src={`http://localhost:8080/${ele.images[0]}`}

@@ -3,12 +3,11 @@ const Schema = mongoose.Schema;
 
 const commentSchema = new mongoose.Schema({
   text: String,
-  likes: Number,
-  recipeId: {
+  userId: {
     type: Schema.Types.ObjectId,
-    ref: "Recipe",
-    required: "true",
+    ref: "User",
   },
+  recipeId: String,
 });
 
 const Comment = mongoose.model("Comment", commentSchema);
