@@ -78,7 +78,6 @@ export const loginUser = (userObj, toast, navigate) => async (dispatch) => {
         isClosable: true,
       });
       navigate("/");
-      
     }
   } catch (error) {
     console.log(error);
@@ -160,35 +159,36 @@ export const getUserData = (token, toast) => async (dispatch) => {
 };
 
 // update user details
-export const updateUserDetails = (id, newData, headers, toast) => (dispatch) => {
-  axios
-    .patch(`${process.env.REACT_APP_API_URL}/users/update/${id}`, newData, {
-      headers: headers,
-    })
-    .then((res) => {
-      console.log(res.data);
-      dispatch({
-        type: UPDATE_USER_DETAILS,
-        payload: res.data,
+export const updateUserDetails =
+  (id, newData, headers, toast) => (dispatch) => {
+    axios
+      .patch(`${process.env.REACT_APP_API_URL}/users/update/${id}`, newData, {
+        headers: headers,
+      })
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: UPDATE_USER_DETAILS,
+          payload: res.data,
+        });
+        toast({
+          title: "Your data was successfully updated",
+          description: `${res.data.message}`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: "Your data was successfully updated",
+          description: `${err.response.data.message}`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       });
-      toast({
-        title: "Your data was successfully updated",
-        description: `${res.data.message}`,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    })
-    .catch((err) => {
-      toast({
-        title: "Your data was successfully updated",
-        description: `${err.response.data.message}`,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    });
-};
+  };
 
 // Get user recipes
 export const getUserRecipes = (id, token) => (dispatch) => {
@@ -197,7 +197,11 @@ export const getUserRecipes = (id, token) => (dispatch) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  axios.get(`${process.env.REACT_APP_API_URL}/recipe/getMyRecipe?populate=recipes`, config)
+  axios
+    .get(
+      `${process.env.REACT_APP_API_URL}/recipe/getMyRecipe?populate=recipes`,
+      config
+    )
     .then((response) => {
       console.log(response.data.recipes);
       dispatch({
@@ -206,24 +210,25 @@ export const getUserRecipes = (id, token) => (dispatch) => {
       });
     })
     .catch((error) => {
-      console.error('Error fetching user recipes:', error);
+      console.error("Error fetching user recipes:", error);
     });
 };
 
 export const getAllRecipes = (token) => {
-
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
-
-  return axios.get(`${process.env.REACT_APP_API_URL}/recipe/getAllRecipe`, config).then((res) => {
-    console.log(res.data);
-  }).catch((err) => {
-    console.log(err)
-  })
-}
+  return axios
+    .get(`${process.env.REACT_APP_API_URL}/recipe/getAllRecipe`, config)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 // export const getUserDetailsForSingleRecipe = (token, id) => {
 //   const config = {

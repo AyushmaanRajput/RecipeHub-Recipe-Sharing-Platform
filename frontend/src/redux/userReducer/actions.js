@@ -23,7 +23,7 @@ import {
   POST_LIKE_SUCCESS,
 } from "../authReducer/actionTypes";
 import axios from "axios";
-import { getFeed } from "../recipeReducer/actions";
+import { getUserRecipes } from "../authReducer/actions";
 
 export const updateUser =
   (id, userObj, token, toast, type, id2) => async (dispatch) => {
@@ -71,9 +71,25 @@ export const updateUser =
           duration: 500,
           isClosable: true,
         });
+        dispatch(getUserRecipes(id, token));
       } else if (type === "dislike") {
         toast({
           title: "Post Liked",
+          status: "success",
+          duration: 500,
+          isClosable: true,
+        });
+        dispatch(getUserRecipes(id, token));
+      } else if (type === "save") {
+        toast({
+          title: "Recipe Saved",
+          status: "success",
+          duration: 500,
+          isClosable: true,
+        });
+      } else if (type === "unsave") {
+        toast({
+          title: "Recipe Unsaved",
           status: "success",
           duration: 500,
           isClosable: true,
