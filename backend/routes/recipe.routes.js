@@ -15,6 +15,8 @@ router.get("/feed", recipeController.getFeed);
 // router.get("/getMyRecipe", recipeController.getMyRecipe);
 router.get("/getMyRecipe", recipeController.getMyRecipe);
 
+router.get("/getSingleRecipe/:id", recipeController.getSingleRecipe)
+
 router.get("/getAllRecipe", recipeController.getAllRecipe)
 
 router.patch("/update/:id", recipeController.updateMyRecipe);

@@ -38,8 +38,15 @@ export const AllRoutes = () => {
           </PrivateRoute>
         }
       ></Route>
+      <Route
+        path="/recipe/:postId"
+        element={
+          <PrivateRoute>
+            <SingleRecipe />
+          </PrivateRoute>
+        }
+      ></Route>
       <Route path="/signup" element={<SignUp />}></Route>
-      <Route path="/singleRecipe" element={<SingleRecipe />}></Route>
       <Route path="/login" element={<Login />}></Route>
     </Routes>
   );

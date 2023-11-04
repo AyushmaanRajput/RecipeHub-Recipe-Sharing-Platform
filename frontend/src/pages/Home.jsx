@@ -12,7 +12,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import styled from "styled-components";
-
 import { getUserData, getUserRecipes } from "../redux/authReducer/actions";
 import { Homecard } from "../components/Home/HomeCard";
 import InfoCard from "../components/Home/Card";
