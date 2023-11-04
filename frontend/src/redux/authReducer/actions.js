@@ -224,3 +224,19 @@ export const getAllRecipes = (token) => {
     console.log(err)
   })
 }
+
+// export const getUserDetailsForSingleRecipe = (token, id) => {
+//   const config = {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   };
+
+//   return axios.get(`${process.env.REACT_APP_API_URL}/users/${id}`, config)
+//     .then((res) => {
+//       return res.data;
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// }

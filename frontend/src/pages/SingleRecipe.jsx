@@ -1,323 +1,211 @@
+import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
+import { Carousel } from "../components/Feed/SingleRecipeCarousel";
+import { useParams } from 'react-router-dom'
 import {
   Box,
+  Checkbox,
   Flex,
-  Image,
-  Slider,
-  SliderTrack,
-  SliderThumb,
-  SliderFilledTrack,
-  Text,
   Heading,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
+  Step,
+  StepIcon,
+  StepIndicator,
+  StepNumber,
+  StepSeparator,
+  StepStatus,
+  StepTitle,
+  Stepper,
+  Tag,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
-import styled from "@emotion/styled";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { getUserDetailsForSingleRecipe } from "../redux/authReducer/actions";
+import { getSingleRecipe } from "../redux/recipeReducer/actions";
+import axios from "axios";
+
 
 function SingleRecipe() {
-  const [recipe, setRecipe] = useState({
-    _id: "65448293032528ba26e1a8d0",
-    userId: "654268a6ae82dd883efdcf08",
-    title: "Litti Chokha",
-    images: [
-      "images\\1698988691462.jpg",
-      "images\\1698988691463.jpg",
-      "images\\1698988691464.jpg",
-    ],
-    description:
-      "A traditional North Indian dish consisting of stuffed wheat balls baked over coal or cow dung cakes.",
-    ingredients: [
-      "2 cups whole wheat flour",
-      "1/2 cup ghee or oil",
-      "1 teaspoon carom seeds (ajwain)",
-      "Salt to taste",
-      "Water for kneading",
-      "1 cup roasted gram flour (sattu)",
-      "1 onion (finely chopped)",
-      "2-3 green chilies (finely chopped)",
-      "1 teaspoon ginger-garlic paste",
-      "1/2 teaspoon mustard oil",
-      "2 tablespoons lemon juice",
-      "Fresh coriander leaves (chopped)",
-      "2 large eggplants (baingan)",
-      "4 tomatoes",
-      "2-3 green chilies",
-    ],
-    instructions: [
-      "For the dough, mix whole wheat flour, ghee, carom seeds, salt, and knead into a stiff dough. Rest for 30 minutes.",
-      "For the stuffing, mix roasted gram flour with all ingredients listed for stuffing.",
-      "Divide the dough into small balls, flatten each ball, fill with the stuffing, and seal the edges.",
-      "Bake the stuffed balls over low flame until they turn golden and crisp.",
-      "Roast eggplants, tomatoes, green chilies on an open flame until they're charred and soft.",
-      "Peel the charred skin from eggplants and tomatoes, mash them together.",
-    ],
-    caption:
-      "A flavorful and rustic delicacy from the heart of North India! Hope you guys enjoy it!",
-    veg: true,
-    tags: ["Healthy", "Quick"],
-    cuisine: ["Indian"],
-    likes: [],
-    comments: [],
-    __v: 0,
-  });
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { postId } = useParams()
+  const [owner, setOwner] = useState({});
+  const [recipe, setRecipe] = useState({});
 
-  const handleChangeImage = (nextIndex) => {
-    setCurrentImageIndex(nextIndex);
-  };
-  console.log(recipe);
+  const token =
+    useSelector((store) => store.authReducer.token) ||
+    localStorage.getItem("token");
+
+  useEffect(() => {
+    // async function fetchData() {
+    //   const singleRecipe = await getSingleRecipe(token, postId)
+    //   setRecipe(singleRecipe);
+    //   setOwner(singleRecipe.userId)
+    // }
+
+    // fetchData();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    axios.get(`${process.env.REACT_APP_API_URL}/recipe/getSingleRecipe/${postId}`, config).then((res) => {
+      // console.log(res.data)
+      setRecipe(res?.data);
+      setOwner(res.data.userId)
+      return res.data
+    }).catch((err) => {
+      console.log(err)
+    })
+  }, []);
+
+  console.log("Recipe", recipe);
+  console.log("Owner", owner);
+
+  if(!recipe.title) {
+    return <h1>Loading..</h1>
+  }
 
   return (
-    <DIV>
-      <input type="radio" id="i1" name="images" defaultChecked />
-      <input type="radio" id="i2" name="images" />
-      <input type="radio" id="i3" name="images" />
-      <div className="container">
-      {recipe?.images?.length > 0 &&
-        recipe.images.map((ele, index) => (
-          <div
-            key={index}
-            className={`slide_img ${index === currentImageIndex ? "active" : ""}`}
-            id={`img-${index + 1}`}
-          >
+    <>
+      <DIV>
+        <Box width={"50%"}>
+          <Carousel images={recipe?.images} />
+        </Box>
+        <Box width={"45%"} p={2}>
+          {/* User details image, name, city */}
+          <Flex gap={3}>
             <img
-              src={`http://localhost:8080/${ele}`}
-              alt={`Recipe ${index + 1}`}
+              style={{ borderRadius: "50%" }}
+              width={"15%"}
+              src={`${process.env.REACT_APP_API_URL}/${owner.profileImage}`}
+              alt="Owner"
             />
+            <Box>
+              <Text fontWeight={"bold"}>{owner?.name}</Text>
+              <Flex alignItems={"center"}>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill="#000000"
+                    d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Z"
+                  />
+                </svg>
+                <h5>{owner?.city}</h5>
+              </Flex>
+            </Box>
+          </Flex>
 
-            <label
-              className="prev"
-              htmlFor={`i${index === 0 ? recipe.images.length : index}`}
-              onClick={() => {
-                handleChangeImage(index === 0 ? recipe.images.length - 1 : index - 1);
-              }}
-            >
-              <span>&#x2039;</span>
-            </label>
-            <label
-              className="next"
-              htmlFor={`i${index === recipe.images.length - 1 ? 1 : index + 2}`}
-              onClick={() => {
-                handleChangeImage(index === recipe.images.length - 1 ? 0 : index + 1);
-              }}
-            >
-              <span>&#x203a;</span>
-            </label>
-          </div>
-        ))}
+          {/* Recipe Information */}
+          <Flex flexDir={"column"} mt={5} gap={3}>
+            <Flex gap={3} alignItems={"center"}>
+              <Heading as={"h3"}>{recipe?.title}</Heading>
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill={recipe?.veg ? "#10b981" : "#ea580c"}
+                  d="M20 4v16H4V4h16m2-2H2v20h20V2M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6s6-2.69 6-6s-2.69-6-6-6Z"
+                />
+              </svg>
+            </Flex>
+            <Flex alighItems="center" gap={3}>
+              <svg
+                width="33"
+                height="33"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill="#000000"
+                  d="m20 15l2-2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h13l-2 2H4v12h16v-3zm2.44-8.56l-.88-.88a1.5 1.5 0 0 0-2.12 0L12 13v2H6v2h9v-1l7.44-7.44a1.5 1.5 0 0 0 0-2.12z"
+                />
+              </svg>
+              <Text>{recipe?.description}</Text>
+            </Flex>
+            <Flex alighItems="center" gap={3}>
+              <svg
+                width="23"
+                height="23"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill="#000000"
+                  d="M21 15c0-4.625-3.507-8.441-8-8.941V4h-2v2.059c-4.493.5-8 4.316-8 8.941v2h18v-2zM2 18h20v2H2z"
+                />
+              </svg>{" "}
+              <Text>{recipe.cuisine[0]}</Text>
+            </Flex>
+          </Flex>
+          <Flex gap={4} my={3}>
+            {recipe?.tags?.length > 0 &&
+              recipe?.tags?.map((ele, index) => <Tag key={index}>{ele}</Tag>)}
+          </Flex>
+        </Box>
+      </DIV>
+      {/* Recipe Ingredients */}
+      <Box width={"90%"} m={"auto"} display={"flex"} >
+        <Box width={"40%"}>
+          <Heading as={"h3"} m={3}>
+            Ingredients
+          </Heading>
+          <VStack textAlign="left" align="start">
+            {recipe?.ingredients.length > 0 &&
+              recipe.ingredients.map((ele, ind) => (
+                <Flex>
+                  <Checkbox colorScheme="green" defaultChecked>
+                    <Text>{ele}</Text>
+                  </Checkbox>
+                </Flex>
+              ))}
+          </VStack>
+        </Box>
+        <Box width={"60%"}>
+          <Heading as={"h3"} m={3}>
+            Instructions
+          </Heading>
+          <Stepper orientation='vertical' height='450px' gap='0'>
+      {recipe?.instructions.map((step, index) => (
+        <Step key={index}>
+          <StepIndicator>
+            <StepStatus
+              complete={<StepIcon />}
+              incomplete={<StepNumber />}
+              active={<StepNumber />}
+            />
+          </StepIndicator>
 
-      <div id="nav_slide">
-        {recipe?.images?.length > 0 &&
-          recipe.images.map((ele, index) => (
-            <label
-              htmlFor={`i${index + 1}`}
-              className={`dots ${index === currentImageIndex ? "active" : ""}`}
-              id={`dot${index + 1}`}
-            ></label>
-          ))}
-      </div>
-      </div>
+          <Box>
+            <StepTitle>{step}</StepTitle>
+          </Box>
 
-      <Tabs isFitted>
-        <TabList>
-          <Tab>One</Tab>
-          <Tab>Two</Tab>
-          <Tab>Three</Tab>
-        </TabList>
-
-        <TabPanels>
-          <TabPanel>
-            <p>one!</p>
-          </TabPanel>
-          <TabPanel>
-            <p>two!</p>
-          </TabPanel>
-          <TabPanel>
-            <p>three!</p>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </DIV>
+          <StepSeparator />
+        </Step>
+      ))}
+    </Stepper>
+        </Box>
+      </Box>
+    </>
   );
 }
 
 export default SingleRecipe;
 
 const DIV = styled.div`
-  #i1,
-  #i2,
-  #i3,
-  #i4,
-  #i5 {
-    display: none;
-  }
+  display: flex;
+  justify-content: space-around;
+  width: 95%;
+  margin: 50px auto;
 
-  .img {
-    border-radius: 10px;
-  }
-
-  .container {
-    margin: 0 auto;
-    margin-top: 20px;
-    position: relative;
-    width: 70%;
-    height: 0;
-    padding-bottom: 38%;
-    user-select: none;
-    border-radius: 10px;
-  }
-
-  .container .slide_img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
-  .container .slide_img img {
-    width: inherit;
-    height: inherit;
-  }
-
-  .prev,
-  .next {
-    width: 12%;
-    height: inherit;
-    position: absolute;
-    top: 0;
-    color: rgba(244, 244, 244, 0.9);
-    z-index: 99;
-    transition: 0.45s;
-    cursor: pointer;
-    text-align: center;
-  }
-
-  .next {
-    right: 0;
-  }
-  .prev {
-    left: 0;
-  }
-
-  label span {
-    position: absolute;
-    font-size: 100pt;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .container #nav_slide {
-    width: 100%;
-    bottom: 12%;
-    height: 11px;
-    position: absolute;
-    text-align: center;
-    z-index: 99;
-    cursor: default;
-  }
-
-  #nav_slide .dots {
-    top: -5px;
-    width: 18px;
-    height: 18px;
-    margin: 0 4px;
-    position: relative;
-    border-radius: 100%;
-    display: inline-block;
-    background-color: rgba(0, 0, 0, 0.6);
-    transition: 0.4s;
-  }
-
-  #nav_slide .dots:hover {
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.9);
-    transition: 0.25s;
-  }
-
-  .slide_img {
-    z-index: -1;
-  }
-
-  #i1:checked ~ #one,
-  #i2:checked ~ #two,
-  #i3:checked ~ #three,
-  #i4:checked ~ #four,
-  #i5:checked ~ #five {
-    z-index: 9;
-    animation: scroll 1s ease-in-out;
-  }
-
-  #i1:checked ~ #nav_slide #dot1,
-  #i2:checked ~ #nav_slide #dot2,
-  #i3:checked ~ #nav_slide #dot3,
-  #i4:checked ~ #nav_slide #dot4,
-  #i5:checked ~ #nav_slide #dot5 {
-    background-color: rgba(255, 255, 255, 0.9);
-  }
-
-  @keyframes scroll {
-    0% {
-      opacity: 0.4;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  /* .yt{
-	margin: 0 auto;
-	margin-top: 50px;
-	position: relative;
-	width: 150px;
-	height:50px;
-	border: outset #2c2c2c 4px;
-	border-radius: 10px;
-	text-align: center;
-	font-size: 30pt;
-	transition: .5s;
-}
-
-.yt a{
-	text-decoration: none;
-	color: #4c4c4c;
-	transition: .5s;
-}
-
-.yt:hover{
-	background: #4c4c4c;
-	transition: .3s;
-}
-
-.yt:hover a{
-	color: #fff;
-	transition: .3s;
-}
- */
-  @media screen and (max-width: 685px) {
-    .container {
-      border: none;
-      width: 100%;
-      height: 0;
-      padding-bottom: 55%;
-    }
-
-    label span {
-      font-size: 50pt;
-    }
-
-    .prev,
-    .next {
-      width: 15%;
-    }
-    #nav_slide .dots {
-      width: 12px;
-      height: 12px;
-    }
-  }
-  @media screen and(min-width: 970px) {
-    .me {
-      display: none;
-    }
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
   }
 `;
