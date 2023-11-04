@@ -1,6 +1,16 @@
 const User = require("../models/User.model");
 
-exports.getSingleUser = async (req, res, next) => {};
+exports.getSingleUser = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id)
+  try {
+    const user = await User.findOne({ _id: id})
+    res.status(200).send(user)
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return res.status(500).json({ message: "Couldn't Fetch User" });
+  }
+};
 
 exports.getLoggedInUser = async (req, res, next) => {
   const userId = req.userId;

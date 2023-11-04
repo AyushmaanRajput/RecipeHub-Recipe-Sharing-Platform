@@ -31,11 +31,13 @@ import {
   IconButton,
   EditableInput,
   Textarea,
+  Heading,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData, updateUserDetails } from "../redux/authReducer/actions";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 
 const dummyRecipeData = [
@@ -885,6 +887,7 @@ export const Account = () => {
   const toast = useToast();
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
   const token =
     useSelector((store) => store.authReducer.token) ||
     localStorage.getItem("token");
@@ -1081,28 +1084,11 @@ export const Account = () => {
                       >
                         <div>
                           <Image
-                            src={`http://localhost:8080/${ele.images[0]}`}
+                            src={`${process.env.REACT_APP_API_URL}/${ele.images[0]}`}
                             alt="Recipe Image"
                             boxSize="100%"
                             objectFit="cover"
-                          />
-                        </div>
-                      </Tooltip>
-                      // <h1>{ele.title}</h1>
-                    ))}
-                </Grid>
-              </TabPanel>
-              <TabPanel>
-                <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-                  {data.length > 0 &&
-                    data.map((ele) => (
-                      <Tooltip label={`Likes: 35, Comments: 77`}>
-                        <div>
-                          <Image
-                            src={ele.image[0]}
-                            alt="Recipe Image"
-                            boxSize="100%"
-                            objectFit="cover"
+                            onClick={() => navigate(`/recipe/${ele._id}`)}
                           />
                         </div>
                       </Tooltip>
@@ -1110,21 +1096,10 @@ export const Account = () => {
                 </Grid>
               </TabPanel>
               <TabPanel>
-                <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-                  {data.length > 0 &&
-                    data.map((ele) => (
-                      <Tooltip label={`Likes: 35, Comments: 77`}>
-                        <div>
-                          <Image
-                            src={ele.image[0]}
-                            alt="Recipe Image"
-                            boxSize="100%"
-                            objectFit="cover"
-                          />
-                        </div>
-                      </Tooltip>
-                    ))}
-                </Grid>
+                <Heading>No Saved recipe</Heading>
+              </TabPanel>
+              <TabPanel>
+                <Heading>No liked recipe</Heading>
               </TabPanel>
             </TabPanels>
           </Tabs>

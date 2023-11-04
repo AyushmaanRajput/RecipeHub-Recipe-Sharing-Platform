@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Grid,
   HStack,
   Heading,
   Image,
@@ -23,183 +24,22 @@ import {
   Text,
   VStack,
   useDisclosure,
+  Flex,
+  CardFooter,
+  Card,
+  CardHeader,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
 import { getAllRecipes } from "../redux/authReducer/actions";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import FeedCard from "../components/Feed/FeedCard";
+import { BiLike, BiShare } from "react-icons/bi";
+import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
+import { Carousel } from "../components/Feed/SingleRecipeCarousel";
 
-const dummyRecipeData = [
-  {
-    userId: "user1",
-    title: "Spaghetti Carbonara",
-    image: [
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Classic Italian pasta dish with eggs, cheese, and pancetta.",
-    ingredients: [
-      "200g spaghetti",
-      "100g pancetta",
-      "2 large eggs",
-      "50g Pecorino cheese",
-      "Salt and black pepper",
-    ],
-    instructions: [
-      "Boil spaghetti until al dente",
-      "Cook pancetta until crispy",
-      "Mix eggs and cheese",
-      "Toss all together",
-      "Season with salt and pepper",
-    ],
-    caption: "Delicious and creamy pasta!",
-    veg: false,
-    time: "30 minutes",
-    tags: ["Italian", "Pasta", "Eggs"],
-    cuisine: "Italian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user2", text: "This is my favorite pasta recipe!" },
-      { userId: "user3", text: "So yummy, thanks for sharing!" },
-    ],
-    rating: 4.5,
-    macros: { calories: 450, carbs: 30, fats: 20, proteins: 25 },
-  },
-  {
-    userId: "user2",
-    title: "Chicken Stir-Fry",
-    image: [
-      "https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Quick and easy stir-fry with chicken and vegetables.",
-    ingredients: [
-      "300g chicken breast",
-      "Assorted vegetables",
-      "Soy sauce",
-      "Ginger",
-      "Garlic",
-    ],
-    instructions: [
-      "Marinate chicken in soy sauce, ginger, and garlic",
-      "Stir-fry chicken and vegetables",
-      "Serve hot",
-    ],
-    caption: "Healthy and delicious!",
-    veg: false,
-    time: "20 minutes",
-    tags: ["Chinese", "Stir-Fry", "Chicken"],
-    cuisine: "Chinese",
-    likes: ["user1", "user2"],
-    comments: [
-      { userId: "user1", text: "I make this all the time!" },
-      { userId: "user2", text: "Great weeknight dinner option." },
-    ],
-    rating: 4.2,
-    macros: { calories: 320, carbs: 15, fats: 10, proteins: 35 },
-  },
-  {
-    userId: "user3",
-    title: "Margarita Pizza",
-    image: [
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Classic Italian pizza with tomato, basil, and mozzarella cheese.",
-    ingredients: [
-      "Pizza dough",
-      "Tomato sauce",
-      "Fresh basil leaves",
-      "Mozzarella cheese",
-      "Olive oil",
-    ],
-    instructions: [
-      "Roll out pizza dough",
-      "Spread tomato sauce and add toppings",
-      "Bake in a hot oven",
-      "Drizzle with olive oil",
-      "Top with fresh basil leaves",
-    ],
-    caption: "Simple and delicious!",
-    veg: true,
-    time: "25 minutes",
-    tags: ["Italian", "Pizza", "Mozzarella"],
-    cuisine: "Italian",
-    likes: ["user2", "user3", "user4"],
-    comments: [
-      { userId: "user2", text: "I love Margarita pizza!" },
-      { userId: "user4", text: "The fresh basil is a game-changer." },
-    ],
-    rating: 4.6,
-    macros: { calories: 300, carbs: 40, fats: 12, proteins: 15 },
-  },
-  {
-    userId: "user4",
-    title: "Vegetable Curry",
-    image: [
-      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "A flavorful and spicy curry with mixed vegetables.",
-    ingredients: [
-      "Assorted vegetables",
-      "Curry paste",
-      "Coconut milk",
-      "Spices",
-      "Rice",
-    ],
-    instructions: [
-      "Chop and cook vegetables",
-      "Simmer in curry paste and coconut milk",
-      "Season with spices",
-      "Serve over rice",
-    ],
-    caption: "Perfect for a cozy dinner!",
-    veg: true,
-    time: "45 minutes",
-    tags: ["Indian", "Curry", "Vegetarian"],
-    cuisine: "Indian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user3", text: "This is a family favorite." },
-      { userId: "user5", text: "I like it spicy!" },
-    ],
-    rating: 4.4,
-    macros: { calories: 380, carbs: 35, fats: 18, proteins: 10 },
-  },
-  {
-    userId: "user5",
-    title: "Greek Salad",
-    image: [
-      "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Refreshing salad with tomatoes, cucumbers, feta cheese, and olives.",
-    ingredients: [
-      "Tomatoes",
-      "Cucumbers",
-      "Feta cheese",
-      "Kalamata olives",
-      "Red onion",
-    ],
-    instructions: [
-      "Chop vegetables",
-      "Crumble feta cheese",
-      "Toss all ingredients",
-      "Dress with olive oil and lemon juice",
-    ],
-    caption: "Healthy and tasty!",
-    veg: true,
-    time: "15 minutes",
-    tags: ["Greek", "Salad", "Vegetarian"],
-    cuisine: "Greek",
-    likes: ["user2", "user4"],
-    comments: [
-      { userId: "user4", text: "I could eat this every day." },
-      { userId: "user6", text: "So fresh and delicious!" },
-    ],
-    rating: 4.7,
-    macros: { calories: 220, carbs: 15, fats: 16, proteins: 8 },
-  },
-];
 
 export const Explore = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -207,26 +47,24 @@ export const Explore = () => {
   const [recipe, setRecipe] = useState([]);
   const [save, setSave] = useState(false);
   const [rating, setRating] = useState("");
+  const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("");
   const handleRatingChange = (event) => {
     setRating(event.target.value);
   };
+
   const token =
     useSelector((store) => store.authReducer.token) ||
     localStorage.getItem("token");
-
-  const handleSave = () => {
-    setSave(!save);
-  };
 
   const handleFilter = () => {
     const data = {
       cuisine: selectedCuisines,
       rating: rating,
-      veg : selectedOption
-    }
-    console.log(data)
-  }
+      veg: selectedOption,
+    };
+    console.log(data);
+  };
 
   // Function to set cuisine multiple option
   const handleCuisineChange = (e) => {
@@ -254,16 +92,18 @@ export const Explore = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-  
-    axios.get(`${process.env.REACT_APP_API_URL}/recipe/getAllRecipe`, config).then((res) => {
-      console.log(res.data);
-      setRecipe(res.data);
-    }).catch((err) => {
-      console.log(err)
-    })
+
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/recipe/getAllRecipe`, config)
+      .then((res) => {
+        setRecipe(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
-  console.log(recipe, "recipe")
+  console.log(recipe, "recipe");
 
   // All types of cuisine
   const cuisines = [
@@ -408,102 +248,90 @@ export const Explore = () => {
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
                   Close
                 </Button>
-                <Button variant="ghost" onClick={handleFilter}>Apply</Button>
+                <Button variant="ghost" onClick={handleFilter}>
+                  Apply
+                </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </Box>
         {/* Mapping all recipe */}
-        <VStack margin={20} spacing={5}>
-          {recipe.length > 0 &&
-            recipe.map((ele) => (
-              <Box
-                boxShadow={"rgba(0, 0, 0, 0.35) 0px 5px 15px"}
-                display="flex"
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                width="100%"
-                padding="2"
-                border="1px solid #ccc"
-                marginX={5}
-                position="relative"
-              >
-                <Image
-                  src={`http://localhost:8080/${ele.images[0]}`}
-                  alt={ele.title}
-                  boxSize="25%"
-                  objectFit="cover"
-                />
-
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
-                  width="75%"
-                  height="100%"
-                  paddingX="5"
-                >
-                  {/* Title */}
-                  <Heading as="h3" size="lg">
-                    {ele.title}
-                  </Heading>
-
-                  {/* Preparation time and rating */}
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    height={"100%"}
-                    marginY="2"
-                  >
-                    <Text fontSize="sm" color="gray.500">
-                      Preparation Time: {ele.time}
-                    </Text>
-                    <Text fontSize="sm" color="gray.500">
-                      Rating: {ele.rating}
-                    </Text>
-                  </Box>
-
-                  {/* Save button */}
-                  <Box
-                    position="absolute"
-                    top="5"
-                    right="5"
-                    paddingX="2"
-                    paddingY="1"
-                    borderRadius="sm"
-                    onClick={handleSave}
-                  >
-                    <svg
-                      width="48"
-                      height="48"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
+        <DIV>
+          {recipe?.length > 0 &&
+            recipe.map((ele, index) => (
+              <Card key={index}>
+                <Box borderWidth="0" borderRadius="md" overflow="hidden">
+                  <CardHeader>
+                    {/* <Image
+                      width="100%"
+                      src={`${process.env.REACT_APP_API_URL}/${ele.images[0]}`}
+                      alt="Card"
+                    /> */}
+                    <Carousel height={"300px"} images={ele?.images} />
+                  </CardHeader>
+                  <Box p="1rem">
+                    <Heading fontSize="2xl" fontWeight="bold">
+                      {ele.title}
+                    </Heading>
+                    <Tag my={3}>{ele?.cuisine[0]}</Tag>
+                    <Text fontSize="md">{ele.description}</Text>
+                    <Flex mt={3} flexWrap="wrap" gap={3}>
+                      {ele?.tags?.length > 0 &&
+                        ele?.tags.map((e, index) => <Tag key={index}>{e}</Tag>)}
+                    </Flex>
+                    <CardFooter
+                      px="0"
+                      justify="flex-start"
+                      gap="1rem"
+                      flexWrap="wrap"
+                      sx={{
+                        "& > button": {
+                          minW: "136px",
+                        },
+                      }}
                     >
-                      <path
-                        fill="#eab308"
-                        d={
-                          !save
-                            ? "M5 21V5q0-.825.588-1.413T7 3h10q.825 0 1.413.588T19 5v16l-7-3l-7 3Zm2-3.05l5-2.15l5 2.15V5H7v12.95ZM7 5h10H7Z"
-                            : "M5 21V5q0-.825.588-1.413T7 3h10q.825 0 1.413.588T19 5v16l-7-3l-7 3Z"
-                        }
-                      />
-                    </svg>
+                      <Button
+                        flex={{ base: "1", md: "0.25" }}
+                        bg={"#fff"}
+                        color={"#666"}
+                        variant="outline"
+                      >
+                        <BiLike color={"#666"} />
+                        <Text ml="4px">{ele?.likes?.length}</Text>
+                      </Button>
+                      <Button
+                        flex={{ base: "1", md: "0.25" }}
+                        variant="outline"
+                        leftIcon={<BiShare />}
+                        onClick={() => navigate(`/recipe/${ele._id}`)}
+                      >
+                        View Recipe
+                      </Button>
+                    </CardFooter>
                   </Box>
-
-                  {/* Description */}
-                  <Text fontSize="md">{ele.description}</Text>
-
-                  {/* Number of comments */}
-                  <Text fontSize="sm" color="gray.500" marginTop="2">
-                    {ele.comments.length}
-                  </Text>
                 </Box>
-              </Box>
+              </Card>
             ))}
-        </VStack>
+        </DIV>
       </Box>
     </>
   );
 };
+
+const DIV = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 30px;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr); /* 1 column on screens up to 768px wide */
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on screens between 769px and 1024px wide */
+  }
+
+  @media (min-width: 1025px) {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on screens wider than 1024px */
+  }
+`;

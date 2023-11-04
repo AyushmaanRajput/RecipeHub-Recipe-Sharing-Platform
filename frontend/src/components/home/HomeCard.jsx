@@ -3,8 +3,9 @@ import { Card, CardBody, Heading, Image, Stack, Text } from "@chakra-ui/react";
 export const Homecard = () => {
     return (
       <Card
-        w="350px"
+        // w="350px"
         h="150px"
+        textAlign="start"
         direction={{ base: "column", sm: "row" }}
         overflow="hidden"
         variant="outline"
@@ -20,7 +21,7 @@ export const Homecard = () => {
         </Stack>
         <Image
           objectFit="cover"
-          width=""
+          
           borderRadius="10px"
          
           

@@ -21,7 +21,7 @@ const InfoCard = ({img,direction}) => {
         mr={4}
       />
       <Box>
-      <Heading  size='mg'>
+      <Heading  size='md'>
     About
   </Heading>
         <Heading fontWeight="bold" >HEALTHY AND QUALITY <br/> WITH A NEW FEEL</Heading>

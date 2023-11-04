@@ -51,7 +51,7 @@ exports.getAllRecipe = async (req, res, next) => {
       sort["rating.value"] = rating === "asc" ? 1 : -1;
     }
 
-    const recipes = await Recipe.find(filter).sort(sort);
+    const recipes = await Recipe.find(filter).sort(sort).populate("userId");
     res.status(200).json(recipes);
   } catch (error) {
     return res.status(500).json({ message: "Failed to get recipes", error });
@@ -147,3 +147,15 @@ exports.getFeed = async (req, res, next) => {
     res.status(400).json({ error: "Couldn't fetch user feed" });
   }
 };
+
+exports.getSingleRecipe = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    console.log(id,"recipe id")
+    const recipe = await Recipe.findOne({ _id: id }).populate("userId")
+    res.status(200).json(recipe);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: "Couldn't fetch recipe" });
+  }
+}

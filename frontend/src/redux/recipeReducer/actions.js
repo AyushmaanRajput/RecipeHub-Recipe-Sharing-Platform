@@ -107,3 +107,20 @@ export const updateRecipe = (id, recipe,token, toast) => async (dispatch) => {
     dispatch({ type: ADDRECIPE_ERROR });
   }
 };
+
+
+export const getSingleRecipe = (token,id) =>  {
+  
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios.get(`${process.env.REACT_APP_API_URL}/recipe/getSingleRecipe/${id}`, config).then((res) => {
+    // console.log(res.data)
+    return res.data
+  }).catch((err) => {
+    console.log(err)
+  })
+}
