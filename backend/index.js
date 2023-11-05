@@ -14,6 +14,7 @@ const notiRoutes = require("./routes/notifications.routes");
 
 // // Middlewares
 const upload = require("./middlewares/upload.middleware");
+const chatRouter = require("./routes/chat.routes");
 
 app.use(cors());
 app.use(express.json());
@@ -31,6 +32,7 @@ app.use("/recipe", recipeRoutes);
 app.use("/users", userRoutes);
 app.use("/comment", commentRoutes);
 app.use("/notification", notiRoutes);
+app.use("/chat", chatRouter);
 
 app.listen(process.env.PORT, async () => {
   try {

@@ -49,26 +49,33 @@ exports.addNewRecipe = async (req, res, next) => {
 
 exports.getAllRecipe = async (req, res, next) => {
   try {
-    const { cuisine, rating, veg } = req.query;
+    const { cuisine, impression, veg } = req.query;
     const filter = {};
-
+    
     if (cuisine) {
-      // Filter by cuisine
       filter.cuisine = { $in: JSON.parse(cuisine) };
     }
-
+    console.log(cuisine)
+    
     if (veg === "veg" || veg === "non-veg") {
-      // Filter by veg or non-veg
       filter.veg = veg === "veg";
     }
 
     const sort = {};
-    if (rating) {
-      // Sort by rating in ascending or descending order
-      sort["rating.value"] = rating === "asc" ? 1 : -1;
+
+    if (impression) {
+      if (impression === "asc") {
+        sort["likes"] = 1; // Sort in ascending order of likes array length
+      } else if (impression === "desc") {
+        sort["likes"] = -1; // Sort in descending order of likes array length
+      }
     }
 
-    const recipes = await Recipe.find(filter).sort(sort).populate("userId");
+    const recipes = await Recipe.find(filter)
+      .sort(sort)
+      .populate("userId")
+      .populate("likes")
+      .populate("comments");
     res.status(200).json(recipes);
   } catch (error) {
     return res.status(500).json({ message: "Failed to get recipes", error });
@@ -78,11 +85,13 @@ exports.getAllRecipe = async (req, res, next) => {
 exports.getMyRecipe = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   let populate = req.query.populate;
-  const query = req.query;
+  console.log("populate: ", populate)
   const { userId } = req;
   if (populate) {
     try {
-      const recipe = await User.findOne({ _id: userId }).populate(populate);
+      const recipe = await User.findOne({ _id: userId }).populate("recipes")
+      .populate("likedRecipes")
+      .populate("savedRecipes");;
       res.status(201).json(recipe);
     } catch (error) {
       return res

@@ -151,10 +151,20 @@ exports.addFriendToUser = async (req, res, next) => {
         .status(200)
         .json({ status: "User updated successfully", updatedUser });
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.error("Error fetching user data:", error.message);
       return res.status(500).json({ message: "Internal Server Error" });
     }
   } else {
     res.status(400).json({ message: "User Doesn't exist" });
+  }
+};
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const user = await User.find().populate("friends").populate("recipes");
+    res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: "Something went wrong" });
   }
 };

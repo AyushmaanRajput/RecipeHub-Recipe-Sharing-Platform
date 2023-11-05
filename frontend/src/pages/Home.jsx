@@ -18,6 +18,8 @@ import InfoCard from "../components/home/Card";
 import { RecipeCard } from "../components/home/RecipeCard";
 import ImageGrid from "../components/home/ImageGrid";
 import { Reveal } from "../components/common/Reveal";
+import Footer from "../components/Footer";
+
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -28,11 +30,6 @@ export const Home = () => {
   useEffect(() => {
     if (!user && token) {
       dispatch(getUserData(token, toast));
-    }
-  }, []);
-  useEffect(() => {
-    if (token) {
-      dispatch(getUserRecipes(user?._id, token));
     }
   }, []);
   return (

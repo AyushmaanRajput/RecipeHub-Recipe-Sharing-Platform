@@ -21,6 +21,6 @@ router.get("/getSingleRecipe/:id", recipeController.getSingleRecipe);
 
 router.patch("/update/:id", recipeController.updateMyRecipe);
 
-// router.delete("/deleteMyRecipe/:id", recipeController.deleteMyRecipe);
+router.delete("/deleteMyRecipe/:id", recipeController.deleteMyRecipe);
 
 module.exports = router;
