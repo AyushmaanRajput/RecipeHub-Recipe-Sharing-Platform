@@ -2,7 +2,7 @@ import { Box, Flex, Text, Image, HStack, Icon } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 
-export const Carousel = ({ images, height="500px" }) => {
+export const Carousel = ({ images, height = "500px" }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slidesCount = images.length;
 
@@ -25,8 +25,7 @@ export const Carousel = ({ images, height="500px" }) => {
 
   return (
     <Flex
-      width="95%"
-      background="#edf3f8"
+      width="100%"
       borderRadius={"1rem"}
       overflow={"hidden"}
       alignItems="center"

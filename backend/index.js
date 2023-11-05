@@ -10,6 +10,7 @@ const authRoutes = require("./routes/auth.routes");
 const recipeRoutes = require("./routes/recipe.routes");
 const userRoutes = require("./routes/user.routes");
 const commentRoutes = require("./routes/comment.routes");
+const notiRoutes = require("./routes/notifications.routes");
 
 // // Middlewares
 const upload = require("./middlewares/upload.middleware");
@@ -30,6 +31,7 @@ app.use("/auth", authRoutes);
 app.use("/recipe", recipeRoutes);
 app.use("/users", userRoutes);
 app.use("/comment", commentRoutes);
+app.use("/notification", notiRoutes);
 app.use("/chat", chatRouter);
 
 app.listen(process.env.PORT, async () => {

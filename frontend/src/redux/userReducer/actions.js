@@ -36,6 +36,7 @@ export const updateUser =
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "X-Action-Type": type,
           },
         }
       );

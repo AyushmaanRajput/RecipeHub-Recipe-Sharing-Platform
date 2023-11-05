@@ -6,6 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { logoutUser } from "../../redux/authReducer/actions";
 import { Container } from "./Container";
+import { FaBell } from "react-icons/fa";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Text,
+} from "@chakra-ui/react";
+import { Notifications } from "./Notifications";
 
 export const Navbar = () => {
   const isAuth = useSelector((store) => store.authReducer.isAuth);
@@ -22,61 +30,105 @@ export const Navbar = () => {
   return (
     <Container>
       <Flex
-        width={"min(80rem,100%)"}
         mx="auto"
         as="nav"
         align="center"
-        justify="space-between"
-        wrap="wrap"
-        padding="1rem 1.5rem"
+        justifyContent="space-between"
+        padding="0.5rem 1.5rem"
+        background="white"
         color="text"
       >
-        <Box as={Link} to="/" fontSize="2xl" fontWeight="bold">
-          Recipe<span style={{}}>Hub</span>
-        </Box>
-        <Box>
-          <Button as={Link} to="/" variant="link" color="text" mx="2">
+        <Box display="flex" gap="1rem">
+          <Text
+            fontFamily={"Kaushan Script"}
+            as={Link}
+            to="/"
+            fontSize="2xl"
+            fontWeight="bold"
+            mr="1rem"
+          >
+            Recipe
+            <Text display="inline" color="primary.500">
+              Hub
+            </Text>
+          </Text>
+          <Button
+            as={Link}
+            to="/"
+            variant="link"
+            color="text"
+            _hover={{ color: "primary.500" }}
+          >
             Home
           </Button>
-          <Button as={Link} to="/explore" variant="link" color="text" mx="2">
+          <Button
+            as={Link}
+            to="/explore"
+            variant="link"
+            color="text"
+            _hover={{ color: "primary.500" }}
+          >
             Explore
           </Button>
-          <Button as={Link} to="/feed" variant="link" color="text" mx="2">
+          <Button
+            as={Link}
+            to="/feed"
+            variant="link"
+            color="text"
+            _hover={{ color: "primary.500" }}
+          >
             Feed
           </Button>
-          <Button as={Link} to="/account" variant="link" color="text" mx="2">
+          <Button
+            as={Link}
+            to="/account"
+            variant="link"
+            color="text"
+            _hover={{ color: "primary.500" }}
+          >
             Account
           </Button>
         </Box>
-        <Box>
+        <Flex alignItem="center" gap="1rem">
           {isAuth ? (
             <>
-              <Button
-                variant="link"
-                color="text"
-                mr="0"
-                onClick={logoutHandler}
-              >
-                Logout
-              </Button>
+              <Popover placement="top-end">
+                <PopoverTrigger>
+                  <Button
+                    variant="link"
+                    color="text"
+                    opacity="0.8"
+                    _hover={{
+                      opacity: 1,
+                      color: "primary.500",
+                    }}
+                  >
+                    <FaBell size={24} />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent zIndex={100000} position="relative">
+                  <Box p="4">
+                    <Notifications />
+                  </Box>
+                </PopoverContent>
+              </Popover>
+              <Button onClick={logoutHandler}>Logout</Button>
             </>
           ) : (
             <>
-              <Button as={Link} to="/login" variant="link" color="text" mr="4">
+              <Button
+                border={"1px solid"}
+                borderColor={"secondary"}
+                color="secondary"
+                variant="outline"
+                onClick={() => navigate("/login")}
+              >
                 Login
               </Button>
-              <Button
-                as={Link}
-                to="/signup"
-                variant="link"
-                color="text"
-                mr="0"
-              >
-                SingUp
-              </Button>
+              <Button onClick={() => navigate("/signup")}>SingUp</Button>
             </>
           )}
-        </Box>
+        </Flex>
       </Flex>
     </Container>
   );

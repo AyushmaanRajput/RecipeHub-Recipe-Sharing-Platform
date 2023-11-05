@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
 const notificationSchema = new mongoose.Schema({
   message: String,
   time: String,
@@ -11,6 +10,7 @@ const notificationSchema = new mongoose.Schema({
     ref: "User",
     required: "true",
   },
+  senderImage: String,
 });
 
 const Notification = mongoose.model("Notification", notificationSchema);
