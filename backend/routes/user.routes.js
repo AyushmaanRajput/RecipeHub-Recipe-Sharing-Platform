@@ -16,6 +16,8 @@ router.get("/notfriends", userController.getNotFriends);
 
 router.get("/:id", userController.getSingleUser);
 
+router.get("/getAllUsers/admin", userController.getAllUsers);
+
 router.get("/", userController.getLoggedInUser);
 
 router.patch("/update/:id", userController.updateUser);
