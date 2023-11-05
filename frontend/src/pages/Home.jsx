@@ -13,10 +13,10 @@ import {
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import { getUserData, getUserRecipes } from "../redux/authReducer/actions";
-import { Homecard } from "../components/Home/HomeCard";
-import InfoCard from "../components/Home/Card";
-import { RecipeCard } from "../components/Home/RecipeCard";
-import ImageGrid from "../components/Home/ImageGrid";
+import { Homecard } from "../components/home/HomeCard";
+import InfoCard from "../components/home/Card";
+import { RecipeCard } from "../components/home/RecipeCard";
+import ImageGrid from "../components/home/ImageGrid";
 import Footer from "../components/Footer";
 
 export const Home = () => {
@@ -28,11 +28,6 @@ export const Home = () => {
   useEffect(() => {
     if (!user && token) {
       dispatch(getUserData(token, toast));
-    }
-  }, []);
-  useEffect(() => {
-    if (token) {
-      dispatch(getUserRecipes(user?._id, token));
     }
   }, []);
   return (

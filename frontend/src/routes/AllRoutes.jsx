@@ -8,6 +8,7 @@ import { SignUp } from "../pages/SignUp";
 import { PrivateRoute } from "./PrivateRoute";
 import { AddRecipeModal } from "../pages/AddRecipeModal";
 import SingleRecipe from "../pages/SingleRecipe";
+import Admin from "../pages/Admin";
 
 export const AllRoutes = () => {
   return (
@@ -44,6 +45,14 @@ export const AllRoutes = () => {
           <PrivateRoute>
             <SingleRecipe />
           </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/admin"
+        element={
+          // <PrivateRoute>
+            <Admin />
+          // </PrivateRoute>
         }
       ></Route>
       <Route path="/signup" element={<SignUp />}></Route>

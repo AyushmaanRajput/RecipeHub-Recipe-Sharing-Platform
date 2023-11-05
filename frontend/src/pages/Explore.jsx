@@ -40,30 +40,23 @@ import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "../components/Feed/SingleRecipeCarousel";
 
-
 export const Explore = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCuisines, setSelectedCuisines] = useState([]);
   const [recipe, setRecipe] = useState([]);
-  const [save, setSave] = useState(false);
-  const [rating, setRating] = useState("");
+  const [filter, setFilter] = useState(false);
+  const [impression, setImpression] = useState(null);
   const navigate = useNavigate();
-  const [selectedOption, setSelectedOption] = useState("");
-  const handleRatingChange = (event) => {
-    setRating(event.target.value);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const handleImpressionChange = (event) => {
+    setImpression(event.target.value);
   };
-
   const token =
     useSelector((store) => store.authReducer.token) ||
     localStorage.getItem("token");
 
   const handleFilter = () => {
-    const data = {
-      cuisine: selectedCuisines,
-      rating: rating,
-      veg: selectedOption,
-    };
-    console.log(data);
+    setFilter(!filter);
   };
 
   // Function to set cuisine multiple option
@@ -82,7 +75,6 @@ export const Explore = () => {
   // Function to remove cuisine
   const handleCuisineRemove = (cuisine) => {
     const updatedCuisines = selectedCuisines.filter((item) => item !== cuisine);
-    console.log("Updated cuisines: " + updatedCuisines);
     setSelectedCuisines(updatedCuisines);
   };
 
@@ -94,14 +86,31 @@ export const Explore = () => {
     };
 
     axios
-      .get(`${process.env.REACT_APP_API_URL}/recipe/getAllRecipe`, config)
+      .get(`${process.env.REACT_APP_API_URL}/recipe/getAllRecipe`, {
+        params: {
+          impression: impression,
+          veg: selectedOption,
+        },
+        headers: config.headers,
+      })
       .then((res) => {
-        setRecipe(res.data);
+        let filteredRecipes = res.data; // Initialize filteredRecipes with all recipes
+
+        if (selectedCuisines.length > 0) {
+          filteredRecipes = res.data.filter((recipe) => {
+            // Check if at least one cuisine in the selectedCuisines array matches the cuisines of the recipe
+            return selectedCuisines.some((selectedCuisine) =>
+              recipe.cuisine.includes(selectedCuisine)
+            );
+          });
+        }
+
+        setRecipe(filteredRecipes); // Set the state with the filtered or unfiltered recipes
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [filter]);
 
   console.log(recipe, "recipe");
 
@@ -115,7 +124,6 @@ export const Explore = () => {
     "Greek",
     "Filipino",
     "Japanese",
-    "Other",
   ];
 
   return (
@@ -193,12 +201,12 @@ export const Explore = () => {
               <ModalBody>
                 {/* Options for rating */}
                 <Select
-                  value={rating}
-                  onChange={handleRatingChange}
-                  placeholder="Rating"
+                  value={impression}
+                  onChange={handleImpressionChange}
+                  placeholder="Recipes with Impressions"
                 >
-                  <option value="asc">Ascending order</option>
-                  <option value="desc">Descending order</option>
+                  <option value="asc">Highest</option>
+                  <option value="desc">Lowest</option>
                 </Select>
                 {/* Options for selecting veg / non-veg recipe */}
                 <RadioGroup
@@ -292,15 +300,6 @@ export const Explore = () => {
                     >
                       <Button
                         flex={{ base: "1", md: "0.25" }}
-                        bg={"#fff"}
-                        color={"#666"}
-                        variant="outline"
-                      >
-                        <BiLike color={"#666"} />
-                        <Text ml="4px">{ele?.likes?.length}</Text>
-                      </Button>
-                      <Button
-                        flex={{ base: "1", md: "0.25" }}
                         variant="outline"
                         leftIcon={<BiShare />}
                         onClick={() => navigate(`/recipe/${ele._id}`)}
@@ -324,14 +323,23 @@ const DIV = styled.div`
   gap: 20px;
   margin: 30px;
   @media (max-width: 768px) {
-    grid-template-columns: repeat(1, 1fr); /* 1 column on screens up to 768px wide */
+    grid-template-columns: repeat(
+      1,
+      1fr
+    ); /* 1 column on screens up to 768px wide */
   }
 
   @media (min-width: 769px) and (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on screens between 769px and 1024px wide */
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ); /* 2 columns on screens between 769px and 1024px wide */
   }
 
   @media (min-width: 1025px) {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on screens wider than 1024px */
+    grid-template-columns: repeat(
+      3,
+      1fr
+    ); /* 3 columns on screens wider than 1024px */
   }
 `;

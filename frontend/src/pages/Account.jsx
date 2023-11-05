@@ -39,863 +39,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserData, updateUserDetails } from "../redux/authReducer/actions";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
-
-const dummyRecipeData = [
-  {
-    userId: "user1",
-    title: "Spaghetti Carbonara",
-    image: [
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Classic Italian pasta dish with eggs, cheese, and pancetta.",
-    ingredients: [
-      "200g spaghetti",
-      "100g pancetta",
-      "2 large eggs",
-      "50g Pecorino cheese",
-      "Salt and black pepper",
-    ],
-    instructions: [
-      "Boil spaghetti until al dente",
-      "Cook pancetta until crispy",
-      "Mix eggs and cheese",
-      "Toss all together",
-      "Season with salt and pepper",
-    ],
-    caption: "Delicious and creamy pasta!",
-    veg: false,
-    time: "30 minutes",
-    tags: ["Italian", "Pasta", "Eggs"],
-    cuisine: "Italian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user2", text: "This is my favorite pasta recipe!" },
-      { userId: "user3", text: "So yummy, thanks for sharing!" },
-    ],
-    rating: 4.5,
-    macros: { calories: 450, carbs: 30, fats: 20, proteins: 25 },
-  },
-  {
-    userId: "user2",
-    title: "Chicken Stir-Fry",
-    image: [
-      "https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Quick and easy stir-fry with chicken and vegetables.",
-    ingredients: [
-      "300g chicken breast",
-      "Assorted vegetables",
-      "Soy sauce",
-      "Ginger",
-      "Garlic",
-    ],
-    instructions: [
-      "Marinate chicken in soy sauce, ginger, and garlic",
-      "Stir-fry chicken and vegetables",
-      "Serve hot",
-    ],
-    caption: "Healthy and delicious!",
-    veg: false,
-    time: "20 minutes",
-    tags: ["Chinese", "Stir-Fry", "Chicken"],
-    cuisine: "Chinese",
-    likes: ["user1", "user2"],
-    comments: [
-      { userId: "user1", text: "I make this all the time!" },
-      { userId: "user2", text: "Great weeknight dinner option." },
-    ],
-    rating: 4.2,
-    macros: { calories: 320, carbs: 15, fats: 10, proteins: 35 },
-  },
-  {
-    userId: "user3",
-    title: "Margarita Pizza",
-    image: [
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Classic Italian pizza with tomato, basil, and mozzarella cheese.",
-    ingredients: [
-      "Pizza dough",
-      "Tomato sauce",
-      "Fresh basil leaves",
-      "Mozzarella cheese",
-      "Olive oil",
-    ],
-    instructions: [
-      "Roll out pizza dough",
-      "Spread tomato sauce and add toppings",
-      "Bake in a hot oven",
-      "Drizzle with olive oil",
-      "Top with fresh basil leaves",
-    ],
-    caption: "Simple and delicious!",
-    veg: true,
-    time: "25 minutes",
-    tags: ["Italian", "Pizza", "Mozzarella"],
-    cuisine: "Italian",
-    likes: ["user2", "user3", "user4"],
-    comments: [
-      { userId: "user2", text: "I love Margarita pizza!" },
-      { userId: "user4", text: "The fresh basil is a game-changer." },
-    ],
-    rating: 4.6,
-    macros: { calories: 300, carbs: 40, fats: 12, proteins: 15 },
-  },
-  {
-    userId: "user4",
-    title: "Vegetable Curry",
-    image: [
-      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "A flavorful and spicy curry with mixed vegetables.",
-    ingredients: [
-      "Assorted vegetables",
-      "Curry paste",
-      "Coconut milk",
-      "Spices",
-      "Rice",
-    ],
-    instructions: [
-      "Chop and cook vegetables",
-      "Simmer in curry paste and coconut milk",
-      "Season with spices",
-      "Serve over rice",
-    ],
-    caption: "Perfect for a cozy dinner!",
-    veg: true,
-    time: "45 minutes",
-    tags: ["Indian", "Curry", "Vegetarian"],
-    cuisine: "Indian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user3", text: "This is a family favorite." },
-      { userId: "user5", text: "I like it spicy!" },
-    ],
-    rating: 4.4,
-    macros: { calories: 380, carbs: 35, fats: 18, proteins: 10 },
-  },
-  {
-    userId: "user5",
-    title: "Greek Salad",
-    image: [
-      "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Refreshing salad with tomatoes, cucumbers, feta cheese, and olives.",
-    ingredients: [
-      "Tomatoes",
-      "Cucumbers",
-      "Feta cheese",
-      "Kalamata olives",
-      "Red onion",
-    ],
-    instructions: [
-      "Chop vegetables",
-      "Crumble feta cheese",
-      "Toss all ingredients",
-      "Dress with olive oil and lemon juice",
-    ],
-    caption: "Healthy and tasty!",
-    veg: true,
-    time: "15 minutes",
-    tags: ["Greek", "Salad", "Vegetarian"],
-    cuisine: "Greek",
-    likes: ["user2", "user4"],
-    comments: [
-      { userId: "user4", text: "I could eat this every day." },
-      { userId: "user6", text: "So fresh and delicious!" },
-    ],
-    rating: 4.7,
-    macros: { calories: 220, carbs: 15, fats: 16, proteins: 8 },
-  },
-  {
-    userId: "user1",
-    title: "Spaghetti Carbonara",
-    image: [
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Classic Italian pasta dish with eggs, cheese, and pancetta.",
-    ingredients: [
-      "200g spaghetti",
-      "100g pancetta",
-      "2 large eggs",
-      "50g Pecorino cheese",
-      "Salt and black pepper",
-    ],
-    instructions: [
-      "Boil spaghetti until al dente",
-      "Cook pancetta until crispy",
-      "Mix eggs and cheese",
-      "Toss all together",
-      "Season with salt and pepper",
-    ],
-    caption: "Delicious and creamy pasta!",
-    veg: false,
-    time: "30 minutes",
-    tags: ["Italian", "Pasta", "Eggs"],
-    cuisine: "Italian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user2", text: "This is my favorite pasta recipe!" },
-      { userId: "user3", text: "So yummy, thanks for sharing!" },
-    ],
-    rating: 4.5,
-    macros: { calories: 450, carbs: 30, fats: 20, proteins: 25 },
-  },
-  {
-    userId: "user2",
-    title: "Chicken Stir-Fry",
-    image: [
-      "https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Quick and easy stir-fry with chicken and vegetables.",
-    ingredients: [
-      "300g chicken breast",
-      "Assorted vegetables",
-      "Soy sauce",
-      "Ginger",
-      "Garlic",
-    ],
-    instructions: [
-      "Marinate chicken in soy sauce, ginger, and garlic",
-      "Stir-fry chicken and vegetables",
-      "Serve hot",
-    ],
-    caption: "Healthy and delicious!",
-    veg: false,
-    time: "20 minutes",
-    tags: ["Chinese", "Stir-Fry", "Chicken"],
-    cuisine: "Chinese",
-    likes: ["user1", "user2"],
-    comments: [
-      { userId: "user1", text: "I make this all the time!" },
-      { userId: "user2", text: "Great weeknight dinner option." },
-    ],
-    rating: 4.2,
-    macros: { calories: 320, carbs: 15, fats: 10, proteins: 35 },
-  },
-  {
-    userId: "user3",
-    title: "Margarita Pizza",
-    image: [
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Classic Italian pizza with tomato, basil, and mozzarella cheese.",
-    ingredients: [
-      "Pizza dough",
-      "Tomato sauce",
-      "Fresh basil leaves",
-      "Mozzarella cheese",
-      "Olive oil",
-    ],
-    instructions: [
-      "Roll out pizza dough",
-      "Spread tomato sauce and add toppings",
-      "Bake in a hot oven",
-      "Drizzle with olive oil",
-      "Top with fresh basil leaves",
-    ],
-    caption: "Simple and delicious!",
-    veg: true,
-    time: "25 minutes",
-    tags: ["Italian", "Pizza", "Mozzarella"],
-    cuisine: "Italian",
-    likes: ["user2", "user3", "user4"],
-    comments: [
-      { userId: "user2", text: "I love Margarita pizza!" },
-      { userId: "user4", text: "The fresh basil is a game-changer." },
-    ],
-    rating: 4.6,
-    macros: { calories: 300, carbs: 40, fats: 12, proteins: 15 },
-  },
-  {
-    userId: "user4",
-    title: "Vegetable Curry",
-    image: [
-      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "A flavorful and spicy curry with mixed vegetables.",
-    ingredients: [
-      "Assorted vegetables",
-      "Curry paste",
-      "Coconut milk",
-      "Spices",
-      "Rice",
-    ],
-    instructions: [
-      "Chop and cook vegetables",
-      "Simmer in curry paste and coconut milk",
-      "Season with spices",
-      "Serve over rice",
-    ],
-    caption: "Perfect for a cozy dinner!",
-    veg: true,
-    time: "45 minutes",
-    tags: ["Indian", "Curry", "Vegetarian"],
-    cuisine: "Indian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user3", text: "This is a family favorite." },
-      { userId: "user5", text: "I like it spicy!" },
-    ],
-    rating: 4.4,
-    macros: { calories: 380, carbs: 35, fats: 18, proteins: 10 },
-  },
-  {
-    userId: "user5",
-    title: "Greek Salad",
-    image: [
-      "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Refreshing salad with tomatoes, cucumbers, feta cheese, and olives.",
-    ingredients: [
-      "Tomatoes",
-      "Cucumbers",
-      "Feta cheese",
-      "Kalamata olives",
-      "Red onion",
-    ],
-    instructions: [
-      "Chop vegetables",
-      "Crumble feta cheese",
-      "Toss all ingredients",
-      "Dress with olive oil and lemon juice",
-    ],
-    caption: "Healthy and tasty!",
-    veg: true,
-    time: "15 minutes",
-    tags: ["Greek", "Salad", "Vegetarian"],
-    cuisine: "Greek",
-    likes: ["user2", "user4"],
-    comments: [
-      { userId: "user4", text: "I could eat this every day." },
-      { userId: "user6", text: "So fresh and delicious!" },
-    ],
-    rating: 4.7,
-    macros: { calories: 220, carbs: 15, fats: 16, proteins: 8 },
-  },
-  {
-    userId: "user1",
-    title: "Spaghetti Carbonara",
-    image: [
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Classic Italian pasta dish with eggs, cheese, and pancetta.",
-    ingredients: [
-      "200g spaghetti",
-      "100g pancetta",
-      "2 large eggs",
-      "50g Pecorino cheese",
-      "Salt and black pepper",
-    ],
-    instructions: [
-      "Boil spaghetti until al dente",
-      "Cook pancetta until crispy",
-      "Mix eggs and cheese",
-      "Toss all together",
-      "Season with salt and pepper",
-    ],
-    caption: "Delicious and creamy pasta!",
-    veg: false,
-    time: "30 minutes",
-    tags: ["Italian", "Pasta", "Eggs"],
-    cuisine: "Italian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user2", text: "This is my favorite pasta recipe!" },
-      { userId: "user3", text: "So yummy, thanks for sharing!" },
-    ],
-    rating: 4.5,
-    macros: { calories: 450, carbs: 30, fats: 20, proteins: 25 },
-  },
-  {
-    userId: "user2",
-    title: "Chicken Stir-Fry",
-    image: [
-      "https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Quick and easy stir-fry with chicken and vegetables.",
-    ingredients: [
-      "300g chicken breast",
-      "Assorted vegetables",
-      "Soy sauce",
-      "Ginger",
-      "Garlic",
-    ],
-    instructions: [
-      "Marinate chicken in soy sauce, ginger, and garlic",
-      "Stir-fry chicken and vegetables",
-      "Serve hot",
-    ],
-    caption: "Healthy and delicious!",
-    veg: false,
-    time: "20 minutes",
-    tags: ["Chinese", "Stir-Fry", "Chicken"],
-    cuisine: "Chinese",
-    likes: ["user1", "user2"],
-    comments: [
-      { userId: "user1", text: "I make this all the time!" },
-      { userId: "user2", text: "Great weeknight dinner option." },
-    ],
-    rating: 4.2,
-    macros: { calories: 320, carbs: 15, fats: 10, proteins: 35 },
-  },
-  {
-    userId: "user3",
-    title: "Margarita Pizza",
-    image: [
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Classic Italian pizza with tomato, basil, and mozzarella cheese.",
-    ingredients: [
-      "Pizza dough",
-      "Tomato sauce",
-      "Fresh basil leaves",
-      "Mozzarella cheese",
-      "Olive oil",
-    ],
-    instructions: [
-      "Roll out pizza dough",
-      "Spread tomato sauce and add toppings",
-      "Bake in a hot oven",
-      "Drizzle with olive oil",
-      "Top with fresh basil leaves",
-    ],
-    caption: "Simple and delicious!",
-    veg: true,
-    time: "25 minutes",
-    tags: ["Italian", "Pizza", "Mozzarella"],
-    cuisine: "Italian",
-    likes: ["user2", "user3", "user4"],
-    comments: [
-      { userId: "user2", text: "I love Margarita pizza!" },
-      { userId: "user4", text: "The fresh basil is a game-changer." },
-    ],
-    rating: 4.6,
-    macros: { calories: 300, carbs: 40, fats: 12, proteins: 15 },
-  },
-  {
-    userId: "user4",
-    title: "Vegetable Curry",
-    image: [
-      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "A flavorful and spicy curry with mixed vegetables.",
-    ingredients: [
-      "Assorted vegetables",
-      "Curry paste",
-      "Coconut milk",
-      "Spices",
-      "Rice",
-    ],
-    instructions: [
-      "Chop and cook vegetables",
-      "Simmer in curry paste and coconut milk",
-      "Season with spices",
-      "Serve over rice",
-    ],
-    caption: "Perfect for a cozy dinner!",
-    veg: true,
-    time: "45 minutes",
-    tags: ["Indian", "Curry", "Vegetarian"],
-    cuisine: "Indian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user3", text: "This is a family favorite." },
-      { userId: "user5", text: "I like it spicy!" },
-    ],
-    rating: 4.4,
-    macros: { calories: 380, carbs: 35, fats: 18, proteins: 10 },
-  },
-  {
-    userId: "user5",
-    title: "Greek Salad",
-    image: [
-      "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Refreshing salad with tomatoes, cucumbers, feta cheese, and olives.",
-    ingredients: [
-      "Tomatoes",
-      "Cucumbers",
-      "Feta cheese",
-      "Kalamata olives",
-      "Red onion",
-    ],
-    instructions: [
-      "Chop vegetables",
-      "Crumble feta cheese",
-      "Toss all ingredients",
-      "Dress with olive oil and lemon juice",
-    ],
-    caption: "Healthy and tasty!",
-    veg: true,
-    time: "15 minutes",
-    tags: ["Greek", "Salad", "Vegetarian"],
-    cuisine: "Greek",
-    likes: ["user2", "user4"],
-    comments: [
-      { userId: "user4", text: "I could eat this every day." },
-      { userId: "user6", text: "So fresh and delicious!" },
-    ],
-    rating: 4.7,
-    macros: { calories: 220, carbs: 15, fats: 16, proteins: 8 },
-  },
-  {
-    userId: "user1",
-    title: "Spaghetti Carbonara",
-    image: [
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Classic Italian pasta dish with eggs, cheese, and pancetta.",
-    ingredients: [
-      "200g spaghetti",
-      "100g pancetta",
-      "2 large eggs",
-      "50g Pecorino cheese",
-      "Salt and black pepper",
-    ],
-    instructions: [
-      "Boil spaghetti until al dente",
-      "Cook pancetta until crispy",
-      "Mix eggs and cheese",
-      "Toss all together",
-      "Season with salt and pepper",
-    ],
-    caption: "Delicious and creamy pasta!",
-    veg: false,
-    time: "30 minutes",
-    tags: ["Italian", "Pasta", "Eggs"],
-    cuisine: "Italian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user2", text: "This is my favorite pasta recipe!" },
-      { userId: "user3", text: "So yummy, thanks for sharing!" },
-    ],
-    rating: 4.5,
-    macros: { calories: 450, carbs: 30, fats: 20, proteins: 25 },
-  },
-  {
-    userId: "user2",
-    title: "Chicken Stir-Fry",
-    image: [
-      "https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Quick and easy stir-fry with chicken and vegetables.",
-    ingredients: [
-      "300g chicken breast",
-      "Assorted vegetables",
-      "Soy sauce",
-      "Ginger",
-      "Garlic",
-    ],
-    instructions: [
-      "Marinate chicken in soy sauce, ginger, and garlic",
-      "Stir-fry chicken and vegetables",
-      "Serve hot",
-    ],
-    caption: "Healthy and delicious!",
-    veg: false,
-    time: "20 minutes",
-    tags: ["Chinese", "Stir-Fry", "Chicken"],
-    cuisine: "Chinese",
-    likes: ["user1", "user2"],
-    comments: [
-      { userId: "user1", text: "I make this all the time!" },
-      { userId: "user2", text: "Great weeknight dinner option." },
-    ],
-    rating: 4.2,
-    macros: { calories: 320, carbs: 15, fats: 10, proteins: 35 },
-  },
-  {
-    userId: "user3",
-    title: "Margarita Pizza",
-    image: [
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Classic Italian pizza with tomato, basil, and mozzarella cheese.",
-    ingredients: [
-      "Pizza dough",
-      "Tomato sauce",
-      "Fresh basil leaves",
-      "Mozzarella cheese",
-      "Olive oil",
-    ],
-    instructions: [
-      "Roll out pizza dough",
-      "Spread tomato sauce and add toppings",
-      "Bake in a hot oven",
-      "Drizzle with olive oil",
-      "Top with fresh basil leaves",
-    ],
-    caption: "Simple and delicious!",
-    veg: true,
-    time: "25 minutes",
-    tags: ["Italian", "Pizza", "Mozzarella"],
-    cuisine: "Italian",
-    likes: ["user2", "user3", "user4"],
-    comments: [
-      { userId: "user2", text: "I love Margarita pizza!" },
-      { userId: "user4", text: "The fresh basil is a game-changer." },
-    ],
-    rating: 4.6,
-    macros: { calories: 300, carbs: 40, fats: 12, proteins: 15 },
-  },
-  {
-    userId: "user4",
-    title: "Vegetable Curry",
-    image: [
-      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "A flavorful and spicy curry with mixed vegetables.",
-    ingredients: [
-      "Assorted vegetables",
-      "Curry paste",
-      "Coconut milk",
-      "Spices",
-      "Rice",
-    ],
-    instructions: [
-      "Chop and cook vegetables",
-      "Simmer in curry paste and coconut milk",
-      "Season with spices",
-      "Serve over rice",
-    ],
-    caption: "Perfect for a cozy dinner!",
-    veg: true,
-    time: "45 minutes",
-    tags: ["Indian", "Curry", "Vegetarian"],
-    cuisine: "Indian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user3", text: "This is a family favorite." },
-      { userId: "user5", text: "I like it spicy!" },
-    ],
-    rating: 4.4,
-    macros: { calories: 380, carbs: 35, fats: 18, proteins: 10 },
-  },
-  {
-    userId: "user5",
-    title: "Greek Salad",
-    image: [
-      "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Refreshing salad with tomatoes, cucumbers, feta cheese, and olives.",
-    ingredients: [
-      "Tomatoes",
-      "Cucumbers",
-      "Feta cheese",
-      "Kalamata olives",
-      "Red onion",
-    ],
-    instructions: [
-      "Chop vegetables",
-      "Crumble feta cheese",
-      "Toss all ingredients",
-      "Dress with olive oil and lemon juice",
-    ],
-    caption: "Healthy and tasty!",
-    veg: true,
-    time: "15 minutes",
-    tags: ["Greek", "Salad", "Vegetarian"],
-    cuisine: "Greek",
-    likes: ["user2", "user4"],
-    comments: [
-      { userId: "user4", text: "I could eat this every day." },
-      { userId: "user6", text: "So fresh and delicious!" },
-    ],
-    rating: 4.7,
-    macros: { calories: 220, carbs: 15, fats: 16, proteins: 8 },
-  },
-  {
-    userId: "user1",
-    title: "Spaghetti Carbonara",
-    image: [
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Classic Italian pasta dish with eggs, cheese, and pancetta.",
-    ingredients: [
-      "200g spaghetti",
-      "100g pancetta",
-      "2 large eggs",
-      "50g Pecorino cheese",
-      "Salt and black pepper",
-    ],
-    instructions: [
-      "Boil spaghetti until al dente",
-      "Cook pancetta until crispy",
-      "Mix eggs and cheese",
-      "Toss all together",
-      "Season with salt and pepper",
-    ],
-    caption: "Delicious and creamy pasta!",
-    veg: false,
-    time: "30 minutes",
-    tags: ["Italian", "Pasta", "Eggs"],
-    cuisine: "Italian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user2", text: "This is my favorite pasta recipe!" },
-      { userId: "user3", text: "So yummy, thanks for sharing!" },
-    ],
-    rating: 4.5,
-    macros: { calories: 450, carbs: 30, fats: 20, proteins: 25 },
-  },
-  {
-    userId: "user2",
-    title: "Chicken Stir-Fry",
-    image: [
-      "https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "Quick and easy stir-fry with chicken and vegetables.",
-    ingredients: [
-      "300g chicken breast",
-      "Assorted vegetables",
-      "Soy sauce",
-      "Ginger",
-      "Garlic",
-    ],
-    instructions: [
-      "Marinate chicken in soy sauce, ginger, and garlic",
-      "Stir-fry chicken and vegetables",
-      "Serve hot",
-    ],
-    caption: "Healthy and delicious!",
-    veg: false,
-    time: "20 minutes",
-    tags: ["Chinese", "Stir-Fry", "Chicken"],
-    cuisine: "Chinese",
-    likes: ["user1", "user2"],
-    comments: [
-      { userId: "user1", text: "I make this all the time!" },
-      { userId: "user2", text: "Great weeknight dinner option." },
-    ],
-    rating: 4.2,
-    macros: { calories: 320, carbs: 15, fats: 10, proteins: 35 },
-  },
-  {
-    userId: "user3",
-    title: "Margarita Pizza",
-    image: [
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Classic Italian pizza with tomato, basil, and mozzarella cheese.",
-    ingredients: [
-      "Pizza dough",
-      "Tomato sauce",
-      "Fresh basil leaves",
-      "Mozzarella cheese",
-      "Olive oil",
-    ],
-    instructions: [
-      "Roll out pizza dough",
-      "Spread tomato sauce and add toppings",
-      "Bake in a hot oven",
-      "Drizzle with olive oil",
-      "Top with fresh basil leaves",
-    ],
-    caption: "Simple and delicious!",
-    veg: true,
-    time: "25 minutes",
-    tags: ["Italian", "Pizza", "Mozzarella"],
-    cuisine: "Italian",
-    likes: ["user2", "user3", "user4"],
-    comments: [
-      { userId: "user2", text: "I love Margarita pizza!" },
-      { userId: "user4", text: "The fresh basil is a game-changer." },
-    ],
-    rating: 4.6,
-    macros: { calories: 300, carbs: 40, fats: 12, proteins: 15 },
-  },
-  {
-    userId: "user4",
-    title: "Vegetable Curry",
-    image: [
-      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description: "A flavorful and spicy curry with mixed vegetables.",
-    ingredients: [
-      "Assorted vegetables",
-      "Curry paste",
-      "Coconut milk",
-      "Spices",
-      "Rice",
-    ],
-    instructions: [
-      "Chop and cook vegetables",
-      "Simmer in curry paste and coconut milk",
-      "Season with spices",
-      "Serve over rice",
-    ],
-    caption: "Perfect for a cozy dinner!",
-    veg: true,
-    time: "45 minutes",
-    tags: ["Indian", "Curry", "Vegetarian"],
-    cuisine: "Indian",
-    likes: ["user2", "user3"],
-    comments: [
-      { userId: "user3", text: "This is a family favorite." },
-      { userId: "user5", text: "I like it spicy!" },
-    ],
-    rating: 4.4,
-    macros: { calories: 380, carbs: 35, fats: 18, proteins: 10 },
-  },
-  {
-    userId: "user5",
-    title: "Greek Salad",
-    image: [
-      "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=2940&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    description:
-      "Refreshing salad with tomatoes, cucumbers, feta cheese, and olives.",
-    ingredients: [
-      "Tomatoes",
-      "Cucumbers",
-      "Feta cheese",
-      "Kalamata olives",
-      "Red onion",
-    ],
-    instructions: [
-      "Chop vegetables",
-      "Crumble feta cheese",
-      "Toss all ingredients",
-      "Dress with olive oil and lemon juice",
-    ],
-    caption: "Healthy and tasty!",
-    veg: true,
-    time: "15 minutes",
-    tags: ["Greek", "Salad", "Vegetarian"],
-    cuisine: "Greek",
-    likes: ["user2", "user4"],
-    comments: [
-      { userId: "user4", text: "I could eat this every day." },
-      { userId: "user6", text: "So fresh and delicious!" },
-    ],
-    rating: 4.7,
-    macros: { calories: 220, carbs: 15, fats: 16, proteins: 8 },
-  },
-];
+import axios from "axios";
 
 export const Account = () => {
   const toast = useToast();
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  const [showRecipe, setShowRecipe] = useState("recipes");
   const token =
     useSelector((store) => store.authReducer.token) ||
     localStorage.getItem("token");
   // console.log(token)
   const user = useSelector((store) => store.authReducer.loggedInUser);
-  const recipes = useSelector((store) => store.authReducer.recipes);
-  console.log(user.savedRecipes, recipes);
-  const [data, setData] = useState(dummyRecipeData);
+  // const recipes = useSelector((store) => store.authReducer.recipes);
+  const [recipes, setRecipes] = useState([])
+  const [likedRecipes, setLikedRecipes] = useState([])
+  const [savedRecipes, setSavedRecipes] = useState([])
   const [userName, setUserName] = useState(user?.name);
   const [userBio, setUserBio] = useState(user?.bio);
   const [userCity, setUserCity] = useState(user?.city);
@@ -928,6 +88,27 @@ export const Account = () => {
       dispatch(getUserData(token, toast));
     }
   }, []);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/recipe/getMyRecipe?populate=${showRecipe}&`,
+        config
+      )
+      .then((response) => {
+        setRecipes(response.data.recipes);
+        setLikedRecipes(response.data.likedRecipes);
+        setSavedRecipes(response.data.savedRecipes);
+      })
+      .catch((error) => {
+        console.error("Error fetching user recipes:", error);
+      });
+  }, [showRecipe]);
 
   return (
     <Container bgColor={"#EEF2F7"} maxW="full" height={"100vh"} p={0}>
@@ -1069,9 +250,13 @@ export const Account = () => {
           {/* Grid View of Images */}
           <Tabs isFitted>
             <TabList>
-              <Tab>Posts</Tab>
-              <Tab>Saved Recipes</Tab>
-              <Tab>Recent Likes</Tab>
+              <Tab onClick={() => setShowRecipe("recipes")}>Posts</Tab>
+              <Tab onClick={() => setShowRecipe("savedRecipes")}>
+                Saved Recipes
+              </Tab>
+              <Tab onClick={() => setShowRecipe("likedRecipes")}>
+                Recent Likes
+              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -1096,10 +281,46 @@ export const Account = () => {
                 </Grid>
               </TabPanel>
               <TabPanel>
-                <Heading>No Saved recipe</Heading>
+                <Grid templateColumns="repeat(3, 1fr)" gap={2}>
+                  {savedRecipes?.length > 0 &&
+                    savedRecipes.map((ele, index) => (
+                      <Tooltip
+                        label={`Likes: ${ele?.likes?.length}, Comments: ${ele?.comments?.length}`}
+                        key={index}
+                      >
+                        <div>
+                          <Image
+                            src={`${process.env.REACT_APP_API_URL}/${ele.images[0]}`}
+                            alt="Recipe Image"
+                            boxSize="100%"
+                            objectFit="cover"
+                            onClick={() => navigate(`/recipe/${ele._id}`)}
+                          />
+                        </div>
+                      </Tooltip>
+                    ))}
+                </Grid>
               </TabPanel>
               <TabPanel>
-                <Heading>No liked recipe</Heading>
+                <Grid templateColumns="repeat(3, 1fr)" gap={2}>
+                  {likedRecipes?.length > 0 &&
+                    likedRecipes.map((ele, index) => (
+                      <Tooltip
+                        label={`Likes: ${ele?.likes?.length}, Comments: ${ele?.comments?.length}`}
+                        key={index}
+                      >
+                        <div>
+                          <Image
+                            src={`${process.env.REACT_APP_API_URL}/${ele.images[0]}`}
+                            alt="Recipe Image"
+                            boxSize="100%"
+                            objectFit="cover"
+                            onClick={() => navigate(`/recipe/${ele._id}`)}
+                          />
+                        </div>
+                      </Tooltip>
+                    ))}
+                </Grid>
               </TabPanel>
             </TabPanels>
           </Tabs>
