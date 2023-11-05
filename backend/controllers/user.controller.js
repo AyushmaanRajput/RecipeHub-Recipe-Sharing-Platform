@@ -1,11 +1,14 @@
 const User = require("../models/User.model");
+const Recipe = require("../models/Recipe.model");
+const Notification = require("../models/Notification.model");
+const Comment = require("../models/Comment.model");
 
 exports.getSingleUser = async (req, res, next) => {
   const { id } = req.params;
-  console.log(id)
+  console.log(id);
   try {
-    const user = await User.findOne({ _id: id})
-    res.status(200).send(user)
+    const user = await User.findOne({ _id: id });
+    res.status(200).send(user);
   } catch (error) {
     console.error("Error fetching user data:", error);
     return res.status(500).json({ message: "Couldn't Fetch User" });
@@ -29,12 +32,37 @@ exports.getLoggedInUser = async (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  // const userId = req.body.userId;
   const { id } = req.params;
+  const type = req.header("X-Action-Type"); // Get the type from the request header
+
   try {
     const updatedUser = await User.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+
+    if (type === "like") {
+      // Handle post liked
+      // Create a notification for the post owner
+      // Access the recipeId from the last element of likedRecipes
+      const recipeId = req.body.likedRecipes[req.body.likedRecipes.length - 1];
+
+      // Fetch the username of the user who liked the post
+      const liker = await User.findById(id);
+
+      // Fetch the recipe and its owner
+      const recipe = await Recipe.findById(recipeId);
+      if (recipe && recipe.userId) {
+        const notification = new Notification({
+          message: `${liker.name} liked your recipe`,
+          time: new Date().toISOString(),
+          type: "like",
+          userId: recipe.userId,
+          senderImage: liker.profileImage,
+        });
+        await notification.save();
+      }
+    }
+
     console.log("User Updated successfully");
     res.status(200).json({ status: "User updated successfully", updatedUser });
   } catch (error) {
@@ -62,7 +90,7 @@ exports.getNotFriends = async (req, res, next) => {
       _id: {
         $nin: userIdsToExclude,
       },
-      friends: { $nin: [userId] }, 
+      friends: { $nin: [userId] },
       requests: { $nin: [userId] },
     });
 

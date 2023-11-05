@@ -25,7 +25,7 @@ export const Carousel = ({ images }) => {
 
   return (
     <Flex
-      width="95%"
+      width="100%"
       background="#edf3f8"
       borderRadius={"1rem"}
       overflow={"hidden"}

@@ -84,7 +84,7 @@ export const getFeed = (token) => async (dispatch) => {
   }
 };
 
-export const updateRecipe = (id, recipe,token, toast) => async (dispatch) => {
+export const updateRecipe = (id, recipe,token, toast,type) => async (dispatch) => {
   dispatch({ type: ADDRECIPE_LOADING });
   try {
     const response = await axios.patch(

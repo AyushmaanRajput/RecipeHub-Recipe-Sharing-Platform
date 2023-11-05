@@ -72,7 +72,7 @@ export const Requests = () => {
           );
         })
       ) : (
-        <Heading as={"h3"}>You Have No Pending Requests</Heading>
+        <Heading size='sm'>You Have No Pending Requests</Heading>
       )}
     </div>
   );

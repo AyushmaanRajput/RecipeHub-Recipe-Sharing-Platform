@@ -1,9 +1,9 @@
 const Recipe = require("../models/Recipe.model");
 const User = require("../models/User.model");
 const Comment = require("../models/Comment.model");
+const Notification = require("../models/Notification.model");
 
 exports.addNewRecipe = async (req, res, next) => {
-  // console.log(req.body, req.files, req.userId);
   const images = [];
   if (req.files && req.files.length > 0) {
     req.files.forEach((file) => {
@@ -16,10 +16,27 @@ exports.addNewRecipe = async (req, res, next) => {
       userId: req.userId,
       images: images,
     });
+
     await newRecipe.save();
-    let user = await User.findOne({ _id: req.userId });
+
+    // Fetch the user who created the recipe
+    const user = await User.findOne({ _id: req.userId });
+
+    // Create a notification for the owner of the recipe (the user who posted the recipe)
+    const notification = new Notification({
+      message: `You created a new recipe post`,
+      time: new Date().toISOString(),
+      type: "post",
+      userId: req.userId,
+      senderImage: user.profileImage,
+    });
+
+    await notification.save();
+
+    // Update the user's recipes
     let userRecipes = [...user.recipes, newRecipe._id];
     await User.findByIdAndUpdate(req.userId, { recipes: userRecipes });
+
     res.status(201).json({
       message: "Recipe created successfully",
       recipe: newRecipe,

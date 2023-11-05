@@ -6,5 +6,6 @@ export const Container = ({ children }) => {
 };
 const CONTAINER = styled.div`
   width: min(100%, 80rem);
+  background-color: transparent;
   margin-inline: auto;
 `;

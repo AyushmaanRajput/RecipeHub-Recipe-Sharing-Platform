@@ -19,6 +19,7 @@ import {
   RadioGroup,
   Select,
   Stack,
+  Divider,
   Tag,
   TagCloseButton,
   Text,
@@ -39,7 +40,6 @@ import { BiLike, BiShare } from "react-icons/bi";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "../components/Feed/SingleRecipeCarousel";
-
 
 export const Explore = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -122,7 +122,7 @@ export const Explore = () => {
     <>
       <Box>
         {/* Hero section image with heading and a button */}
-        <Box h="35vh" position="relative">
+        <Box h="45vh" position="relative">
           <Image
             src="https://images.unsplash.com/photo-1495546968767-f0573cca821e?auto=format&fit=crop&q=80&w=2831&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Hero image"
@@ -155,19 +155,22 @@ export const Explore = () => {
           </VStack>
         </Box>
         {/* Search bar and advance search option */}
-        <Box
-          boxShadow="rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px"
-          padding="4"
-        >
-          <HStack marginX={5} spacing={5}>
+        <Box boxShadow="0 4px 10px #0002" padding="4">
+          <HStack spacing={5} width="min(80rem,100%)" mx="auto">
             {/* <Input variant="flushed" placeholder="Flushed" width='30%' /> */}
             <InputGroup width="30%">
               <InputLeftElement pointerEvents="none">
-                <SearchIcon color="gray.300" />
+                <SearchIcon color="text" />
               </InputLeftElement>
-              <Input placeholder="Search for a recipe" />
+              <Input
+                placeholder="Search for a recipe"
+                border="1px solid"
+                outline="none"
+                borderColor="text"
+                _focus={{ borderColor: "primary.500" }}
+              />
             </InputGroup>
-            <Heading as="h5" size="md" color="#F58332" noOfLines={1}>
+            <Heading as="h5" size="md" color="text">
               Advanced Search
             </Heading>
             {/* This is the icon of filter */}
@@ -177,6 +180,7 @@ export const Explore = () => {
               height="30"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
+              cursor="pointer"
             >
               <path
                 fill="#F58332"
@@ -245,10 +249,17 @@ export const Explore = () => {
                 </HStack>
               </ModalBody>
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                <Button
+                  border={"1px solid"}
+                  borderColor={"secondary"}
+                  color="secondary"
+                  variant="outline"
+                  mr="1rem"
+                  onClick={onClose}
+                >
                   Close
                 </Button>
-                <Button variant="ghost" onClick={handleFilter}>
+                <Button variant="solid" onClick={handleFilter}>
                   Apply
                 </Button>
               </ModalFooter>
@@ -259,7 +270,13 @@ export const Explore = () => {
         <DIV>
           {recipe?.length > 0 &&
             recipe.map((ele, index) => (
-              <Card key={index}>
+              <Card
+                key={index}
+                boxShadow={"lg"}
+                borderRadius="1rem"
+                transition="0.2s ease-in"
+                _hover={{ boxShadow: "xl", transform: "scale(1.01)" }}
+              >
                 <Box borderWidth="0" borderRadius="md" overflow="hidden">
                   <CardHeader>
                     {/* <Image
@@ -269,18 +286,44 @@ export const Explore = () => {
                     /> */}
                     <Carousel height={"300px"} images={ele?.images} />
                   </CardHeader>
+                  <Divider w="90%" mx="auto"></Divider>
                   <Box p="1rem">
-                    <Heading fontSize="2xl" fontWeight="bold">
+                    <Heading
+                      fontSize="lg"
+                      m={0}
+                      lineHeight={1.1}
+                      textTransform="uppercase"
+                      fontWeight="700"
+                    >
                       {ele.title}
                     </Heading>
-                    <Tag my={3}>{ele?.cuisine[0]}</Tag>
-                    <Text fontSize="md">{ele.description}</Text>
-                    <Flex mt={3} flexWrap="wrap" gap={3}>
-                      {ele?.tags?.length > 0 &&
-                        ele?.tags.map((e, index) => <Tag key={index}>{e}</Tag>)}
+                    <Flex
+                      align="center"
+                      justifyContent="space-between"
+                      py={1}
+                      mb="0.5rem"
+                    >
+                      <Text
+                        my={3}
+                        fontFamily={"Kaushan Script"}
+                        fontSize="md"
+                        fontWeight="bold"
+                        color="primary.500"
+                      >
+                        {ele?.cuisine[0]}
+                      </Text>
+                      <Flex mt={3} flexWrap="wrap" gap={3}>
+                        {ele?.tags?.length > 0 &&
+                          ele?.tags.map((e, index) => (
+                            <Tag key={index}>{e}</Tag>
+                          ))}
+                      </Flex>
                     </Flex>
+                    <Text fontSize="sm" mb="1rem">
+                      {ele.description}
+                    </Text>
                     <CardFooter
-                      px="0"
+                      p="0"
                       justify="flex-start"
                       gap="1rem"
                       flexWrap="wrap"
@@ -292,20 +335,24 @@ export const Explore = () => {
                     >
                       <Button
                         flex={{ base: "1", md: "0.25" }}
-                        bg={"#fff"}
-                        color={"#666"}
+                        border={"1px solid"}
+                        borderColor={"secondary"}
+                        color="secondary"
                         variant="outline"
                       >
-                        <BiLike color={"#666"} />
+                        <BiLike />
                         <Text ml="4px">{ele?.likes?.length}</Text>
                       </Button>
                       <Button
                         flex={{ base: "1", md: "0.25" }}
                         variant="outline"
                         leftIcon={<BiShare />}
+                        border={"1px solid"}
+                        borderColor={"secondary"}
+                        color="secondary"
                         onClick={() => navigate(`/recipe/${ele._id}`)}
                       >
-                        View Recipe
+                        Details
                       </Button>
                     </CardFooter>
                   </Box>
@@ -322,16 +369,27 @@ const DIV = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin: 30px;
+  width: min(80rem, 100%);
+  margin-inline: auto;
+  padding-block: 5rem;
   @media (max-width: 768px) {
-    grid-template-columns: repeat(1, 1fr); /* 1 column on screens up to 768px wide */
+    grid-template-columns: repeat(
+      1,
+      1fr
+    ); /* 1 column on screens up to 768px wide */
   }
 
   @media (min-width: 769px) and (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on screens between 769px and 1024px wide */
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ); /* 2 columns on screens between 769px and 1024px wide */
   }
 
   @media (min-width: 1025px) {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on screens wider than 1024px */
+    grid-template-columns: repeat(
+      3,
+      1fr
+    ); /* 3 columns on screens wider than 1024px */
   }
 `;

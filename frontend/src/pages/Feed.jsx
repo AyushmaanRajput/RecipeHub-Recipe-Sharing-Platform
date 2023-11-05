@@ -35,22 +35,27 @@ export const Feed = () => {
       <Flex spacing={8} direction="row">
         <Box
           p={5}
-          w="20%"
+          w="26%"
           h="90vh"
           overflowY="scroll"
           className="scroll"
           backgroundColor={"white"}
           boxShadow="rgba(0, 0, 0, 0.05) 0px 0px 0px 1px"
         >
+          <Heading size={"md"} mb={"2rem"} textTransform="uppercase">
+            People Who Want To Know You
+          </Heading>
+          <Requests></Requests>
+          <Divider my={5} />
+          <Heading size={"md"} mb="2rem" textTransform="uppercase">
+            Your Friends
+          </Heading>
           <InputGroup mb="10px">
             <InputLeftElement pointerEvents="none">
               <BsSearch color="gray.300" />
             </InputLeftElement>
             <Input type="search" placeholder="Search" />
           </InputGroup>
-          <Heading size={"md"} my={4}>
-            Your Friends
-          </Heading>
           {friends.map((friend, index) => {
             return <FriendCard friend={friend} key={index} />;
           })}
@@ -58,21 +63,16 @@ export const Feed = () => {
         <UserFeed />
         <Box
           p={5}
-          w="30%"
-          h="80vh"
           spacing="10px"
           overflowY="scroll"
           className="scroll"
+          // bg="white"
+          height="auto"
         >
-          <Heading size={"md"} mb={"2rem"}>
+          <Heading size={"md"} mb={"1rem"} textTransform="uppercase">
             Find New Friends
           </Heading>
           <NonFriends></NonFriends>
-          <Divider my={10} />
-          <Heading size={"md"} mb={"2rem"}>
-            People Who Want To Know You
-          </Heading>
-          <Requests></Requests>
         </Box>
       </Flex>
     </DIV>

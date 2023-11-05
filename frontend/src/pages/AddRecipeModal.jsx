@@ -32,21 +32,16 @@ export const AddRecipeModal = () => {
 
   return (
     <>
-      <Box
-        position="fixed"
-        bottom="2rem"
-        right="2rem"
-        zIndex="999" // Ensure it's above other elements
-      >
+      <Box position="fixed" bottom="2rem" right="2rem" zIndex="999">
         <Button
           onClick={openModal}
           size="md"
-          bg="teal.500"
-          color="white"
+          bgColor="accent"
+          color="background"
           borderRadius="50%"
           width={4}
           p={6}
-          boxShadow="md"
+          boxShadow="xl"
         >
           <AddIcon />
         </Button>
