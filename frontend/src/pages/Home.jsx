@@ -18,9 +18,44 @@ import InfoCard from "../components/home/Card";
 import { RecipeCard } from "../components/home/RecipeCard";
 import ImageGrid from "../components/home/ImageGrid";
 import { Reveal } from "../components/common/Reveal";
-import Footer from "../components/Footer";
-
-
+const recipes = [
+  {
+    name: "Spicy Mango Salsa",
+    image:
+      "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/9pbikyfivldmvf8rivfg.jpg",
+  },
+  {
+    name: "Creamy Mushroom Risotto",
+    image:
+      "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/32jo3oxq7sfneppw8hrw.jpg",
+  },
+  {
+    name: "Citrus Glazed Salmon",
+    image:
+      "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/69s4bbsn6v44cvllukdj.jpg",
+  },
+  {
+    name: "Garlic Herb Roast",
+    image:
+      "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tb83glu72e9guv4uy8n8.jpg",
+  },
+  {
+    name: "Zesty Avocado Salad",
+    image:
+      "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/acxhjjxsu75xk6fwqazn.jpg",
+  },
+  {
+    name: "Blueberry Pancakes",
+    image:
+      "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/qc6mrixtyl6ma9x9f47k.jpg",
+  },
+];
+let imageUrls = [
+  "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/okl0xaxft6552fjjtz2v.jpg",
+  "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tont20fs91ztyywbv1w3.jpg",
+  "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/58q9ssssox2malve6cey.jpg",
+  "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/jep6d8153aqns3lmxkzz.jpg"
+];
 export const Home = () => {
   const dispatch = useDispatch();
   const toast = useToast();
@@ -66,10 +101,10 @@ export const Home = () => {
               alignItems={"center"}
               gap={"3rem"}
             >
-              {new Array(6).fill(1).map((el, i) => {
+              {recipes.map((el, i) => {
                 return (
                   <Reveal delay={1 + (i + 1) * 0.25}>
-                    <Homecard key={i} />
+                    <Homecard {...el} key={i} />
                   </Reveal>
                 );
               })}
@@ -79,10 +114,23 @@ export const Home = () => {
       </Reveal>
       <Box py={40}>
         <Reveal>
-          <InfoCard direction={"row"} mb={"10rem"} />
+          <InfoCard
+            img={
+              "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/keyqnkmsp4cfr2d4qvtn.jpg"
+            }
+            title={"HEALTHY AND QUALITY WITH A NEW FEEL"}
+            direction={"row"}
+            mb={"10rem"}
+          />
         </Reveal>
         <Reveal>
-          <InfoCard direction={"row-reverse"} />
+          <InfoCard
+            img={
+              "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/yd6q7vj4fhvteleq0065.jpg"
+            }
+            title={"TASTE THE FUTURE OF GOOD FOOD"}
+            direction={"row-reverse"}
+          />
         </Reveal>
       </Box>
       <Reveal>
@@ -114,10 +162,10 @@ export const Home = () => {
           </Text>
           <Button mb={"4rem"}>Explore More</Button>
           <SimpleGrid columns={4} spacing={4} width="min(80rem,100%)" mx="auto">
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
+            {imageUrls.map((el,i)=>{
+              return <RecipeCard key={i} img={el} />
+            })}
+          
           </SimpleGrid>
         </Box>
       </Reveal>
@@ -154,10 +202,12 @@ export const Home = () => {
               THAT'S WHAT OUR <br /> SAY CLIENT
             </Heading>
             <Text mb="2rem">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit id
-              et est eveniet officiis. Quos, ut natus quidem voluptas ducimus
-              quis esse ullam dolor architecto reiciendis porro tempore suscipit
-              animi.
+              This dish combines fresh, high-quality ingredients to create a
+              wholesome and nutritious meal that your body will thank you for.
+              With a unique twist and a burst of exciting flavors, it's the
+              perfect choice for a healthy and satisfying dining experience. Get
+              ready to impress your family and friends with this remarkable
+              recipe.
             </Text>
             <Button>Explore More</Button>
           </Box>
