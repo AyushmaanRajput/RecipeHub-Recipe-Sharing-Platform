@@ -49,17 +49,14 @@ export const AddRecipeModal = () => {
 
       <Modal isOpen={isOpen} onClose={closeModal}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Recipe</ModalHeader>
+        <ModalContent width="min(50rem,100%)">
+          <ModalHeader textTransform={"uppercase"} fontSize={"2xl"}>
+            Add Recipe
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <AddRecipeForm />
+            <AddRecipeForm closeModal={closeModal} />
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="teal" m={0} onClick={closeModal}>
-              Close
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

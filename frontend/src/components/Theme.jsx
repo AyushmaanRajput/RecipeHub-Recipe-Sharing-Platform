@@ -24,6 +24,14 @@ const theme = extendTheme({
     secondary: "#8c8c8c",
     accent: "#e89c45",
   },
+  styles: {
+    global: {
+      body: {
+        width: "100vw", // Set width to 100vw
+        overflowX: "hidden", // Set overflow-x to hidden
+      },
+    },
+  },
   components: {
     Input: {
       baseStyle: {

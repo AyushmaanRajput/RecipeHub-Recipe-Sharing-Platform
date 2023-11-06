@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/authReducer/actions";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import {
   Box,
@@ -38,17 +39,10 @@ export const LoginForm = () => {
   };
 
   return (
-    <Box
-      p={4}
-      borderWidth="1px"
-      borderRadius="md"
-      width="min(30rem,100%)"
-      mx="auto"
-      marginBlock="20vh 30vh"
-    >
+    <Box p={4}>
       <Box></Box>
       <Box>
-        <Heading as="h2" size="lg" mb={4}>
+        <Heading size="2xl" textTransform={"uppercase"} mb={"2rem"}>
           Login
         </Heading>
         <form onSubmit={handleSubmit}>
@@ -72,20 +66,20 @@ export const LoginForm = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <InputRightElement>
-                  <Button size="sm" mr="4" onClick={handlePasswordVisibility}>
-                    {showPassword ? "Hide" : "Show"}
+                <InputRightElement px={2}>
+                  <Button
+                    alignSelf="center"
+                    variant="outline"
+                    size={"md"}
+                    onClick={handlePasswordVisibility}
+                  >
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
             </FormControl>
 
-            <Button
-              type="submit"
-              mx="auto"
-              colorScheme="blue"
-              width="min-content"
-            >
+            <Button type="submit" colorScheme="blue" width="min-content">
               Login
             </Button>
           </Stack>

@@ -18,6 +18,8 @@ import {
   RadioGroup,
   Radio,
   useToast,
+  Flex,
+  Divider,
 } from "@chakra-ui/react";
 import {
   Step,
@@ -68,11 +70,13 @@ const steps = [
   { title: "Third", description: "Add Recipe Images" },
   { title: "Fourth", description: "Add Tags & Caption" },
 ];
-export const AddRecipeForm = () => {
+export const AddRecipeForm = ({ closeModal }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
-  const token= useSelector((store)=>store.authReducer.token) || localStorage.getItem("token");
+  const token =
+    useSelector((store) => store.authReducer.token) ||
+    localStorage.getItem("token");
 
   const [step, setStep] = useState(1);
   const activeStepText = steps[step - 1].description;
@@ -190,16 +194,16 @@ export const AddRecipeForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     // Create a new FormData object
     const formData = new FormData();
-  
+
     // Append text fields
     formData.append("title", recipeData.title);
     formData.append("description", recipeData.description);
     formData.append("veg", recipeData.veg.toString());
     formData.append("caption", recipeData.caption);
-  
+
     // Append cuisine and tags as arrays
     recipeData.cuisine.forEach((cuisine, index) => {
       formData.append(`cuisine[${index}]`, cuisine);
@@ -207,7 +211,7 @@ export const AddRecipeForm = () => {
     recipeData.tags.forEach((tag, index) => {
       formData.append(`tags[${index}]`, tag);
     });
-  
+
     // Append ingredients and instructions as arrays
     recipeData.ingredients.forEach((ingredient, index) => {
       formData.append(`ingredients[${index}]`, ingredient);
@@ -215,20 +219,19 @@ export const AddRecipeForm = () => {
     recipeData.instructions.forEach((instruction, index) => {
       formData.append(`instructions[${index}]`, instruction);
     });
-  
+
     // Append images
     recipeData.images.forEach((image, index) => {
       formData.append(`images`, image);
     });
-  
+
     // Append additional fields as needed (likes, comments, time, rating, etc.)
-  
+
     console.log(token, formData);
-  
+
     // Now, you can dispatch the `addNewRecipe` action with `formData`
-    dispatch(addNewRecipe(token, formData, toast, navigate));
+    dispatch(addNewRecipe(token, formData, toast, navigate, closeModal));
   };
-  
 
   const renderStep = () => {
     switch (step) {
@@ -280,7 +283,6 @@ export const AddRecipeForm = () => {
                 ))}
               </HStack>
             </FormControl>
-
             <FormControl>
               <FormLabel>Veg/Non-Veg</FormLabel>
               <RadioGroup
@@ -294,7 +296,17 @@ export const AddRecipeForm = () => {
                 </HStack>
               </RadioGroup>
             </FormControl>
-            <Button onClick={() => setStep(step + 1)}>Next</Button>
+            <Divider></Divider>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              py="1rem"
+            >
+              <Button variant="outline" m={0} onClick={closeModal}>
+                Close
+              </Button>
+              <Button onClick={() => setStep(step + 1)}>Next</Button>
+            </Flex>
           </Stack>
         );
       case 2:
@@ -303,11 +315,14 @@ export const AddRecipeForm = () => {
             <FormControl>
               <FormLabel>Ingredients</FormLabel>
               <Input
+                mb="0.5rem"
                 name="currentIngredient"
                 value={ingredient}
                 onChange={(e) => setIngredient(e.target.value)}
               />
-              <Button onClick={handleAddIngredient}>Add Ingredient</Button>
+              <Button variant="outline" size="sm" onClick={handleAddIngredient}>
+                Add Ingredient
+              </Button>
               <HStack
                 display={"flex"}
                 flexWrap={"wrap"}
@@ -329,10 +344,17 @@ export const AddRecipeForm = () => {
             <FormControl>
               <FormLabel>Instructions</FormLabel>
               <Textarea
+                mb="0.5rem"
                 value={instruction}
                 onChange={(e) => setInstruction(e.target.value)}
               />
-              <Button onClick={handleAddInstruction}>Add Instruction</Button>
+              <Button
+                size="sm"
+                variant={"outline"}
+                onClick={handleAddInstruction}
+              >
+                Add Instruction
+              </Button>
               <HStack
                 display={"flex"}
                 flexDir={"column"}
@@ -361,21 +383,36 @@ export const AddRecipeForm = () => {
                 ))}
               </HStack>
             </FormControl>
-            <Button onClick={() => setStep(step - 1)}>Back</Button>
-            <Button onClick={() => setStep(step + 1)}>Next</Button>
+            <Divider></Divider>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              py="1rem"
+            >
+              <Button variant="outline" m={0} onClick={closeModal}>
+                Close
+              </Button>
+              <Flex gap="1rem">
+                <Button variant="outline" onClick={() => setStep(step - 1)}>
+                  Back
+                </Button>
+                <Button onClick={() => setStep(step + 1)}>Next</Button>
+              </Flex>
+            </Flex>
           </Stack>
         );
 
       case 3:
         return (
           <Stack spacing={4}>
-            <FormControl>
-              <FormLabel>Images</FormLabel>
+            <FormControl minH={"20vh"}>
+              <FormLabel>Upload Images</FormLabel>
               <input
                 type="file"
                 name="images"
                 multiple
                 onChange={handleFileChange}
+                style={{ marginBottom: "0.5rem" }}
               />
               <Grid templateColumns="repeat(2, 1fr)" gap={2}>
                 {recipeData.images.map((image, index) => (
@@ -388,8 +425,22 @@ export const AddRecipeForm = () => {
                 ))}
               </Grid>
             </FormControl>
-            <Button onClick={() => setStep(step - 1)}>Back</Button>
-            <Button onClick={() => setStep(step + 1)}>Next</Button>
+            <Divider></Divider>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              py="1rem"
+            >
+              <Button variant="outline" m={0} onClick={closeModal}>
+                Close
+              </Button>
+              <Flex gap="1rem">
+                <Button variant="outline" onClick={() => setStep(step - 1)}>
+                  Back
+                </Button>
+                <Button onClick={() => setStep(step + 1)}>Next</Button>
+              </Flex>
+            </Flex>
           </Stack>
         );
       case 4:
@@ -432,8 +483,22 @@ export const AddRecipeForm = () => {
                 // onChange={}
               />
             </FormControl>
-            <Button onClick={() => setStep(step - 1)}>Back</Button>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Divider></Divider>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              py="1rem"
+            >
+              <Button variant="outline" m={0} onClick={closeModal}>
+                Close
+              </Button>
+              <Flex gap="1rem">
+                <Button variant="outline" onClick={() => setStep(step - 1)}>
+                  Back
+                </Button>
+                <Button onClick={handleSubmit}>Post Recipe</Button>
+              </Flex>
+            </Flex>
           </Stack>
         );
       default:
@@ -444,7 +509,7 @@ export const AddRecipeForm = () => {
   return (
     <div>
       <Stack mb={5}>
-        <Stepper size="sm" index={step - 1} gap="0">
+        <Stepper size="sm" index={step - 1} gap="0" mb="1rem">
           {steps.map((step, index) => (
             <Step key={index} gap="0">
               <StepIndicator>

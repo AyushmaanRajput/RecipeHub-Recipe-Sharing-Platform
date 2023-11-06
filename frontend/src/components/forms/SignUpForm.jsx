@@ -56,15 +56,8 @@ export const SignUpForm = () => {
   };
 
   return (
-    <Box
-      p={4}
-      borderWidth="1px"
-      borderRadius="md"
-      width="min(30rem,100%)"
-      mx="auto"
-      mt="2rem"
-    >
-      <Heading as="h2" size="lg" mb={4}>
+    <Box>
+      <Heading textTransform={"uppercase"} mb="2rem" size="2xl">
         Sign Up
       </Heading>
       <form onSubmit={handleSubmit}>

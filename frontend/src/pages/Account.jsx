@@ -32,6 +32,7 @@ import {
   EditableInput,
   Textarea,
   Heading,
+  Divider,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
@@ -53,9 +54,9 @@ export const Account = () => {
   // console.log(token)
   const user = useSelector((store) => store.authReducer.loggedInUser);
   // const recipes = useSelector((store) => store.authReducer.recipes);
-  const [recipes, setRecipes] = useState([])
-  const [likedRecipes, setLikedRecipes] = useState([])
-  const [savedRecipes, setSavedRecipes] = useState([])
+  const [recipes, setRecipes] = useState([]);
+  const [likedRecipes, setLikedRecipes] = useState([]);
+  const [savedRecipes, setSavedRecipes] = useState([]);
   const [userName, setUserName] = useState(user?.name);
   const [userBio, setUserBio] = useState(user?.bio);
   const [userCity, setUserCity] = useState(user?.city);
@@ -111,19 +112,30 @@ export const Account = () => {
   }, [showRecipe]);
 
   return (
-    <Container bgColor={"#EEF2F7"} maxW="full" height={"100vh"} p={0}>
+    <Container
+      bgColor={"#EEF2F7"}
+      maxW="full"
+      height={"100vh"}
+      p={0}
+      paddingBlock={"3rem"}
+    >
       {/* Modal for editting profile */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit profile</ModalHeader>
+          <ModalHeader textTransform={"uppercase"} fontSize={"2xl"}>
+            Edit profile
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {/* For name */}
             <Center>
-              <Text fontWeight={"bold"}>User Name:</Text>
+              <Text fontWeight={"bold"} textTransform={"uppercase"}>
+                Name
+              </Text>
             </Center>
             <Editable
+              mb="1rem"
               textAlign="center"
               defaultValue={user?.name}
               fontSize="md"
@@ -132,15 +144,19 @@ export const Account = () => {
             >
               <EditablePreview />
               {/* Here is the custom input */}
-              <Textarea as={EditableInput} />
+              <Textarea as={EditableInput} my="0.5rem" />
               <EditableControls />
             </Editable>
+            <Divider mb="1rem"></Divider>
 
             {/* For city */}
             <Center>
-              <Text fontWeight={"bold"}>User City:</Text>
+              <Text fontWeight={"bold"} textTransform={"uppercase"}>
+                City
+              </Text>
             </Center>
             <Editable
+              mb="1rem"
               textAlign="center"
               defaultValue={user?.city}
               fontSize="md"
@@ -149,15 +165,19 @@ export const Account = () => {
             >
               <EditablePreview />
               {/* Here is the custom input */}
-              <Textarea as={EditableInput} />
+              <Textarea as={EditableInput} my="0.5rem" />
               <EditableControls />
             </Editable>
+            <Divider mb="1rem"></Divider>
 
             {/* For bio */}
             <Center>
-              <Text fontWeight={"bold"}>User Bio:</Text>
+              <Text fontWeight={"bold"} textTransform="uppercase">
+                Biography
+              </Text>
             </Center>
             <Editable
+              mb="1rem"
               textAlign="center"
               defaultValue={user?.bio}
               fontSize="md"
@@ -166,89 +186,124 @@ export const Account = () => {
             >
               <EditablePreview />
               {/* Here is the custom input */}
-              <Textarea as={EditableInput} />
+              <Textarea as={EditableInput} my="0.5rem" />
               <EditableControls />
             </Editable>
+            <Divider mb="1rem"></Divider>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button variant="outline" mr={"1rem"} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost" onClick={handleEditProfile}>
-              Edit
-            </Button>
+            <Button onClick={handleEditProfile}>Edit</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
       <Flex flexDir={{ base: "column" }} bg="gray.100" p={4}>
         {/* User detail section */}
         <Box
-          textAlign={"center"}
-          w={"70%"}
-          m={"auto"}
+          w={"min(80rem,100%)"}
+          mx={"auto"}
           display={"flex"}
-          flexDirection={"row"}
+          justifyContent={"space-between"}
+          gap="1rem"
+         
         >
           {/* User Profile Info */}
           <Box
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            p={0}
+            p={2}
+            border="1px solid"
+            borderColor={"accent"}
+            borderRadius={"50%"}
+            overflow="hidden"
+            w={{md:'25%',base:"100%"}}
           >
             <Image
+              aspectRatio={1}
+              w={{base:"100%"}}
+              maxH="20rem"
+              borderRadius="50%"
+              objectFit="cover"
               src={user?.profileImage}
               alt="Profile picture"
-              borderRadius="full"
-              // boxSize={"50%"}
-              mx="auto"
-              width={"50%"}
-              height={"70%"}
             />
           </Box>
-          <Box flexDir={{ base: "column" }} width>
-            <Text fontWeight="bold" fontSize="lg" textAlign="center" mt={3}>
-              {user?.name}
-            </Text>
-            <Text textAlign="center">{user?.city}</Text>
-            <Button
-              size="sm"
-              colorScheme="teal"
-              display="block"
-              mx="auto"
-              onClick={onOpen}
-            >
-              Edit Profile
-            </Button>
-            <Text textAlign="center" mt={4}>
+          <Center>
+            <Divider
+              orientation="vertical"
+              borderColor="secondary"
+              opacity={0.3}
+            />
+          </Center>
+          <Box
+            display="flex"
+            flexDir={{ base: "column" }}
+            alignItems={"stretch"}
+            justifyContent={"space-around"}
+          >
+            <Flex alignItems="center">
+              <Text
+                fontWeight="700"
+                fontSize="lg"
+                textTransform={"uppercase"}
+                mr="1rem"
+              >
+                {user?.name}
+              </Text>
+              <Text>{user?.city}</Text>
+              <Button
+                size="sm"
+                colorScheme="primary"
+                variant={"outline"}
+                onClick={onOpen}
+                ml="auto"
+              >
+                Edit Profile
+              </Button>
+            </Flex>
+
+            <Text p={0} m={0}>
               {user?.bio}
             </Text>
             <UnorderedList
               listStyleType="none"
               display="flex"
               justifyContent="space-between"
-              p={4}
+              m="0"
+              textAlign={"center"}
             >
               <ListItem>
-                <Text fontWeight="bold">Posts</Text>
+                <Text fontWeight="bold" textTransform="uppercase">
+                  Posts
+                </Text>
                 <Text>{user?.recipes.length}</Text>
               </ListItem>
               <ListItem>
-                <Text fontWeight="bold">Friends</Text>
+                <Text fontWeight="bold" textTransform="uppercase">
+                  Friends
+                </Text>
                 <Text>{user?.friends.length}</Text>
               </ListItem>
               <ListItem>
-                <Text fontWeight="bold">Saved Recipes</Text>
+                <Text fontWeight="bold" textTransform="uppercase">
+                  Saved Recipes
+                </Text>
                 <Text>{user?.savedRecipes.length}</Text>
+              </ListItem>
+              <ListItem>
+                <Text fontWeight="bold" textTransform="uppercase">
+                  Liked Recipes
+                </Text>
+                <Text>{user?.likedRecipes.length}</Text>
               </ListItem>
             </UnorderedList>
           </Box>
         </Box>
 
         {/* User Posts and others */}
-        <Box w={"70%"} m={"auto"}>
+        <Box w={"min(80rem,100%)"} m={"auto"} mt="1rem">
           {/* Grid View of Images */}
-          <Tabs isFitted>
+          <Tabs colorScheme="primary" isFitted>
             <TabList>
               <Tab onClick={() => setShowRecipe("recipes")}>Posts</Tab>
               <Tab onClick={() => setShowRecipe("savedRecipes")}>
@@ -264,6 +319,9 @@ export const Account = () => {
                   {recipes?.length > 0 &&
                     recipes.map((ele, index) => (
                       <Tooltip
+                        bg="accent"
+                        px={4}
+                        py={2}
                         label={`Likes: ${ele?.likes?.length}, Comments: ${ele?.comments?.length}`}
                         key={index}
                       >
@@ -285,6 +343,9 @@ export const Account = () => {
                   {savedRecipes?.length > 0 &&
                     savedRecipes.map((ele, index) => (
                       <Tooltip
+                        bg="accent"
+                        px={4}
+                        py={2}
                         label={`Likes: ${ele?.likes?.length}, Comments: ${ele?.comments?.length}`}
                         key={index}
                       >
@@ -306,6 +367,9 @@ export const Account = () => {
                   {likedRecipes?.length > 0 &&
                     likedRecipes.map((ele, index) => (
                       <Tooltip
+                        bg="accent"
+                        px={4}
+                        py={2}
                         label={`Likes: ${ele?.likes?.length}, Comments: ${ele?.comments?.length}`}
                         key={index}
                       >
