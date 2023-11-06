@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Image, Text, Flex, Button, Heading } from "@chakra-ui/react";
 
-const InfoCard = ({ img, direction, mb }) => {
+const InfoCard = ({ title,img, direction, mb }) => {
   return (
     <Flex
       margin="auto"
@@ -25,7 +25,8 @@ const InfoCard = ({ img, direction, mb }) => {
           }}
         />
         <Image
-          src="https://cdn.loveandlemons.com/wp-content/uploads/2020/12/plant-based-recipes.jpg"
+          src={img}
+          w={"100%"}
           alt="Sample Image"
           objectFit="cover"
           borderRadius={"2rem 0 2rem 0"}
@@ -56,12 +57,14 @@ const InfoCard = ({ img, direction, mb }) => {
           maxW="500px"
           ml={direction !== "row-reverse" ? "auto" : "none"}
         >
-          HEALTHY AND QUALITY WITH A NEW FEEL
+          {title}
         </Heading>
         <Text maxW="750px" mb="2rem">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit id et
-          est eveniet officiis. Quos, ut natus quidem voluptas ducimus quis esse
-          ullam dolor architecto reiciendis porro tempore suscipit animi.
+        Indulge in a culinary adventure with our delightful recipe. 
+        Savor the perfect blend of flavors, textures, and aromas 
+        that make every bite an unforgettable experience. 
+        Whether you're a seasoned chef or a novice in the kitchen, 
+        this dish is easy to prepare and promises a delectable outcome.
         </Text>
         <Text color="gray.600"></Text>
         <Button>Explore More</Button>
