@@ -166,14 +166,14 @@ export const updateUserDetails =
         headers: headers,
       })
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.updatedUser, "data in action from backend");
         dispatch({
           type: UPDATE_USER_DETAILS,
-          payload: res.data,
+          payload: res.data.updatedUser,
         });
         toast({
           title: "Your data was successfully updated",
-          description: `${res.data.message}`,
+          description: `${res.data.status}`,
           status: "success",
           duration: 3000,
           isClosable: true,
