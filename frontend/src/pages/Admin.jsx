@@ -13,6 +13,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Center,
   Divider,
   Flex,
   HStack,
@@ -172,13 +173,117 @@ const Admin = () => {
             onClick={() => hanldeTab("tabFour")}
             className={state.tabFour ? "active" : null}
           >
-            Step 4
+            Logout
           </div>
         </div>
         <div className="tab-indicator"></div>
         <div className="tab-content">
           <div className={state.tabOne ? "active" : "noShow"}>
-            <h2>This is code section</h2>
+            <Center>
+              <Box p={4} textAlign="center">
+                <Box
+                  maxW="xl"
+                  mx="auto"
+                  p={4}
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  boxShadow="md"
+                >
+                  <Heading as="h1" size="lg">
+                    Welcome to Dashboard
+                  </Heading>
+                  <Text mb={0}>
+                    Hello Ayushmaan Rajput, welcome to your dashboard!
+                  </Text>
+                </Box>
+              </Box>
+            </Center>
+            <Flex flexWrap="wrap" justifyContent="space-between">
+              <Box
+                flex="1"
+                maxW="lg"
+                bg="blue.500"
+                p="3"
+                m="4"
+                borderRadius="md"
+                textAlign="center"
+              >
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 32 32"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="16" cy="16" r="4" fill="white" />
+                  <path
+                    fill="white"
+                    d="M30.94 15.66A16.69 16.69 0 0 0 16 5A16.69 16.69 0 0 0 1.06 15.66a1 1 0 0 0 0 .68A16.69 16.69 0 0 0 16 27a16.69 16.69 0 0 0 14.94-10.66a1 1 0 0 0 0-.68ZM16 22.5a6.5 6.5 0 1 1 6.5-6.5a6.51 6.51 0 0 1-6.5 6.5Z"
+                  />
+                </svg>
+                <Text fontSize="2xl" fontWeight="bold" color="white">
+                  32
+                </Text>
+                <Text fontSize="lg" color="white">
+                  Page views
+                </Text>
+              </Box>
+              <Box
+                flex="1"
+                maxW="lg"
+                bg="red.500"
+                p="3"
+                m="4"
+                borderRadius="md"
+                textAlign="center"
+              >
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill="#ffffff"
+                    fill-rule="evenodd"
+                    d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0Zm0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5H8Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <Text fontSize="2xl" fontWeight="bold" color="white">
+                  {user?.length}
+                </Text>
+                <Text fontSize="lg" color="white">
+                  User registered
+                </Text>
+              </Box>
+              <Box
+                flex="1"
+                maxW="lg"
+                bg="yellow.500"
+                p="3"
+                m="4"
+                borderRadius="md"
+                textAlign="center"
+              >
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill="#ffffff"
+                    d="M0 192c0-35.3 28.7-64 64-64h1.6C73 91.5 105.3 64 144 64c15 0 29 4.1 40.9 11.2C198.2 49.6 225.1 32 256 32s57.8 17.6 71.1 43.2C339 68.1 353 64 368 64c38.7 0 71 27.5 78.4 64h1.6c35.3 0 64 28.7 64 64c0 11.7-3.1 22.6-8.6 32H8.6C3.1 214.6 0 203.7 0 192zm0 91.4C0 268.3 12.3 256 27.4 256h457.2c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1l-1.8 14.5c-2 16-15.6 28-31.8 28H140.2c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4z"
+                  />
+                </svg>
+                <Text fontSize="2xl" fontWeight="bold" color="white">
+                  {recipe?.length}
+                </Text>
+                <Text fontSize="lg" color="white">
+                  Total Recipes
+                </Text>
+              </Box>
+            </Flex>
           </div>
 
           <div className={state.tabTwo ? "active" : "noShow"}>
@@ -219,17 +324,23 @@ const Admin = () => {
                             </Flex>
                           </Box>
                         ))}
-                        <Heading size="md">Recipes by users: </Heading>
-                        <HStack overflowX={"scroll"}>
-                        {
-                            ele?.recipes?.length === 0 ? <Text>No posts yet!</Text> : ele?.recipes.map((e, index) => (
-                                <Box key={index + Date.now()} >
-                                    <Image height={"200px"} width={"200px"} src={`${process.env.REACT_APP_API_URL}/${e?.images[0]}`} />
-                                    <Text fontWeight={"bold"} >{e?.title}</Text>
-                                </Box>
-                            )) 
-                        }
-                        </HStack>
+                      <Heading size="md">Recipes by users: </Heading>
+                      <HStack overflowX={"scroll"}>
+                        {ele?.recipes?.length === 0 ? (
+                          <Text>No posts yet!</Text>
+                        ) : (
+                          ele?.recipes.map((e, index) => (
+                            <Box key={index + Date.now()}>
+                              <Image
+                                height={"200px"}
+                                width={"200px"}
+                                src={`${process.env.REACT_APP_API_URL}/${e?.images[0]}`}
+                              />
+                              <Text fontWeight={"bold"}>{e?.title}</Text>
+                            </Box>
+                          ))
+                        )}
+                      </HStack>
                     </Stack>
                   </CardBody>
                   <Divider />

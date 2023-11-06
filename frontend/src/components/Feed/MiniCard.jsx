@@ -121,7 +121,7 @@ const MiniCard_Request = ({
   );
 };
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://concerned-picture-9849.onrender.com");
 
 socket.on("connect", () => {
   console.log("Connected to the Socket.io server");
@@ -183,7 +183,6 @@ const FriendCard = ({ friend }) => {
     socket.on("sendMessage", (data) => {
       console.log("Refresh message")
       axios.get(`${process.env.REACT_APP_API_URL}/chat/getmessage/${user._id}/${friend._id}`).then((res) => {
-        console.log(res.data);
         setChat(res.data)
       }).catch((err) => {
         console.log(err)
