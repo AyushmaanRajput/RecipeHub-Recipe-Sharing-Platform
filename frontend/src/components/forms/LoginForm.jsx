@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@chakra-ui/react";
+import { Image, useToast } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/authReducer/actions";
 
@@ -29,6 +29,10 @@ export const LoginForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    if(email === "admin@gmail.com" && password === "admin")  {
+      navigate("/admin");
+      return
+    }
     e.preventDefault();
     // Handle form submission logic here
     if (email && password) {
@@ -46,8 +50,10 @@ export const LoginForm = () => {
       mx="auto"
       marginBlock="20vh 30vh"
     >
-      <Box></Box>
-      <Box>
+      <Box width={"100%"}>
+        {/* <Image width={"100%"} src="https://img.freepik.com/free-photo/woman-taking-food-photos-close-up_23-2149294503.jpg?w=740&t=st=1699212698~exp=1699213298~hmac=d5efe9e27510a829fb47235fd3c4d8deac014a14408472c77d1e83bbea1f06ea" alt="Loading..." /> */}
+      </Box>
+      <Box width={"100%"}>
         <Heading as="h2" size="lg" mb={4}>
           Login
         </Heading>
