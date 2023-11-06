@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 
 export const addNewRecipe =
-  (token, recipe, toast, navigate) => async (dispatch) => {
+  (token, recipe, toast, navigate, closeModal) => async (dispatch) => {
     dispatch({ type: ADDRECIPE_LOADING });
     console.log(recipe);
     try {
@@ -37,7 +37,8 @@ export const addNewRecipe =
         duration: 3000,
         isClosable: true,
       });
-      navigate("/");
+      closeModal();
+      navigate("/feed");
     } catch (err) {
       console.log(err);
       dispatch({ type: ADDRECIPE_ERROR });
@@ -84,43 +85,48 @@ export const getFeed = (token) => async (dispatch) => {
   }
 };
 
-export const updateRecipe = (id, recipe,token, toast,type) => async (dispatch) => {
-  dispatch({ type: ADDRECIPE_LOADING });
-  try {
-    const response = await axios.patch(
-      `${process.env.REACT_APP_API_URL}/recipe/update/${id}`,
-      recipe,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(response.data);
-    // dispatch({
-    //   type: UPDATE_RECIPE_SUCCESS,
-    //   payload: response.data.updatedRecipe,
-    // });
-    dispatch(getFeed(token));
-  } catch (err) {
-    console.log("failed to update recipe", err);
-    dispatch({ type: ADDRECIPE_ERROR });
-  }
-};
+export const updateRecipe =
+  (id, recipe, token, toast, type) => async (dispatch) => {
+    dispatch({ type: ADDRECIPE_LOADING });
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_URL}/recipe/update/${id}`,
+        recipe,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      // dispatch({
+      //   type: UPDATE_RECIPE_SUCCESS,
+      //   payload: response.data.updatedRecipe,
+      // });
+      dispatch(getFeed(token));
+    } catch (err) {
+      console.log("failed to update recipe", err);
+      dispatch({ type: ADDRECIPE_ERROR });
+    }
+  };
 
-
-export const getSingleRecipe = (token,id) =>  {
-  
+export const getSingleRecipe = (token, id) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  return axios.get(`${process.env.REACT_APP_API_URL}/recipe/getSingleRecipe/${id}`, config).then((res) => {
-    // console.log(res.data)
-    return res.data
-  }).catch((err) => {
-    console.log(err)
-  })
-}
+  return axios
+    .get(
+      `${process.env.REACT_APP_API_URL}/recipe/getSingleRecipe/${id}`,
+      config
+    )
+    .then((res) => {
+      // console.log(res.data)
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

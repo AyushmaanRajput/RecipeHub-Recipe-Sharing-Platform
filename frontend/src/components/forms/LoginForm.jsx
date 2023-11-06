@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Image, useToast } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/authReducer/actions";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import {
   Box,
@@ -42,19 +43,10 @@ export const LoginForm = () => {
   };
 
   return (
-    <Box
-      p={4}
-      borderWidth="1px"
-      borderRadius="md"
-      width="min(30rem,100%)"
-      mx="auto"
-      marginBlock="20vh 30vh"
-    >
-      <Box width={"100%"}>
-        {/* <Image width={"100%"} src="https://img.freepik.com/free-photo/woman-taking-food-photos-close-up_23-2149294503.jpg?w=740&t=st=1699212698~exp=1699213298~hmac=d5efe9e27510a829fb47235fd3c4d8deac014a14408472c77d1e83bbea1f06ea" alt="Loading..." /> */}
-      </Box>
-      <Box width={"100%"}>
-        <Heading as="h2" size="lg" mb={4}>
+    <Box p={4}>
+      <Box></Box>
+      <Box>
+        <Heading size="2xl" textTransform={"uppercase"} mb={"2rem"}>
           Login
         </Heading>
         <form onSubmit={handleSubmit}>
@@ -78,20 +70,20 @@ export const LoginForm = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <InputRightElement>
-                  <Button size="sm" mr="4" onClick={handlePasswordVisibility}>
-                    {showPassword ? "Hide" : "Show"}
+                <InputRightElement px={2}>
+                  <Button
+                    alignSelf="center"
+                    variant="outline"
+                    size={"md"}
+                    onClick={handlePasswordVisibility}
+                  >
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                   </Button>
                 </InputRightElement>
               </InputGroup>
             </FormControl>
 
-            <Button
-              type="submit"
-              mx="auto"
-              colorScheme="blue"
-              width="min-content"
-            >
+            <Button type="submit" colorScheme="blue" width="min-content">
               Login
             </Button>
           </Stack>

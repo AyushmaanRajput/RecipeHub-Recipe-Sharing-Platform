@@ -513,7 +513,6 @@ export default function FeedCard({ recipe }) {
 
           {/* Add a new comment */}
           <Input
-            value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             focusBorderColor="transparent"
             _focus={{ boxShadow: "none" }}
@@ -521,11 +520,7 @@ export default function FeedCard({ recipe }) {
             type="text"
             placeholder="Add a comment..."
           />
-          <Button
-            onClick={editingComment ? updateCommentHandler : addCommentHandler}
-          >
-            {editingComment ? "Update Comment" : "Add Comment"}
-          </Button>
+          <Button onClick={addCommentHandler}>{"Add Comment"}</Button>
         </CardBody>
       </Card>
     </div>

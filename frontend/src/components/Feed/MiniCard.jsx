@@ -131,7 +131,7 @@ const FriendCard = ({ friend }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [chat, setChat] = useState([]);
   const [message, setMessage] = useState("");
-  const [refresh, setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
   const user = useSelector((store) => store.authReducer.loggedInUser);
   const chatContainerRef = useRef();
   const lastMessageRef = useRef();
@@ -144,8 +144,8 @@ const FriendCard = ({ friend }) => {
       second: "2-digit",
     };
     const formattedTime = now.toLocaleDateString("en-US", options);
-    if(message === "") {
-      return
+    if (message === "") {
+      return;
     }
     const data = {
       sender: user._id,
@@ -154,13 +154,16 @@ const FriendCard = ({ friend }) => {
       time: formattedTime,
     };
 
-    axios.post(`${process.env.REACT_APP_API_URL}/chat/addmessage`, data).then((res) => {
-      console.log(res.data);
-      socket.emit("message")
-      setRefresh(!refresh)
-    }).catch((err) => {
-      console.log(err)
-    })
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/chat/addmessage`, data)
+      .then((res) => {
+        console.log(res.data);
+        socket.emit("message");
+        setRefresh(!refresh);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     setMessage("");
   };
 
@@ -171,13 +174,18 @@ const FriendCard = ({ friend }) => {
   }, [chat]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/chat/getmessage/${user._id}/${friend._id}`).then((res) => {
-      console.log(res.data);
-      setChat(res.data)
-    }).catch((err) => {
-      console.log(err)
-    })
-  }, [refresh])
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/chat/getmessage/${user._id}/${friend._id}`
+      )
+      .then((res) => {
+        console.log(res.data);
+        setChat(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [refresh]);
 
   useEffect(() => {
     socket.on("sendMessage", (data) => {
@@ -217,7 +225,7 @@ const FriendCard = ({ friend }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Flex width="100%">
+            <Flex width="100%" alignItems={"center"}>
               <Avatar src={friend.profileImage} />
               <Heading ml="20px" size="sm" justifySelf="flex-start">
                 {friend.name}
@@ -242,9 +250,7 @@ const FriendCard = ({ friend }) => {
                       <div className="msg-bubble">
                         <div className="msg-info">
                           <div className="msg-info-name">
-                            {ele.sender !== user._id
-                              ? friend.name
-                              : user.name}
+                            {ele.sender !== user._id ? friend.name : user.name}
                           </div>
                           <div className="msg-info-time">{ele.time}</div>
                         </div>
@@ -258,15 +264,20 @@ const FriendCard = ({ friend }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Flex flexDir={"column"}>
+            <Flex flexDir={"column"} w="100%">
               <Textarea
                 value={message}
                 required={true}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Enter your message"
                 width="100%"
+                mb="1rem"
               ></Textarea>
-              <Button onClick={() => sendMessage()} variant="ghost">
+              <Button
+                onClick={() => sendMessage()}
+                variant="solid"
+                alignSelf={"flex-end"}
+              >
                 Send message
               </Button>
             </Flex>
@@ -304,7 +315,7 @@ const CHATBOX = styled.div`
   }
 
   .msger-chat {
-    height: 300px;
+    height: 400px;
     overflow-y: scroll;
   }
   .msger-chat::-webkit-scrollbar {
@@ -344,7 +355,7 @@ const CHATBOX = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
   }
   .msg-info-name {
     margin-right: 10px;
@@ -362,7 +373,7 @@ const CHATBOX = styled.div`
     flex-direction: row-reverse;
   }
   .right-msg .msg-bubble {
-    background: #579ffb;
+    background: #e89c45;
     color: #fff;
     border-bottom-right-radius: 0;
   }

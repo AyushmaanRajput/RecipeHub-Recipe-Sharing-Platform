@@ -10,7 +10,13 @@ import {
   Avatar,
   Divider,
   Center,
+  Icon,
+  AvatarBadge,
 } from "@chakra-ui/react";
+import { FaComment } from "react-icons/fa";
+import { EditIcon } from "@chakra-ui/icons";
+import { CheckCircleIcon } from "@chakra-ui/icons";
+
 import axios from "axios";
 
 export const Notifications = () => {
@@ -18,6 +24,19 @@ export const Notifications = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const [notifications, setNotifications] = useState([]);
+  const reversedNoti = notifications?.slice().reverse().slice(0, 5);
+  const getNotificationIcon = (type) => {
+    switch (type) {
+      case "comment":
+        return <FaComment color="#fb8600ca" />; // Chakra UI Comment icon
+      case "like":
+        return <CheckCircleIcon color="#fb8500ca" />; // Chakra UI CheckCircle icon
+      case "post":
+        return <EditIcon color="#fb8500ca" />; // Chakra UI Edit icon
+      default:
+        return null;
+    }
+  };
 
   const fetchNotifications = () => {
     axios
@@ -60,19 +79,20 @@ export const Notifications = () => {
 
   return (
     <Box>
-      {notifications.length > 0 ? (
-        notifications.map((notification, index) => (
+      {reversedNoti.length > 0 ? (
+        reversedNoti.map((notification, index) => (
           <>
             <Flex gap="0.5rem" alignItems="center">
               <Avatar
                 size="sm"
                 src={`${process.env.REACT_APP_API_URL}/${notification.senderImage}`}
-              />
+              ></Avatar>
               <Center height="50px">
                 <Divider orientation="vertical" />
               </Center>
               <Text key={index} fontSize="0.9rem">
-                {notification.message} at {notification.time}
+                {getNotificationIcon(notification.type)} {notification.message}{" "}
+                at {notification.time}
               </Text>
             </Flex>
             <Divider my={2} />

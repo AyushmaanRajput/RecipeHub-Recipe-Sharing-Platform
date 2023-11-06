@@ -12,7 +12,7 @@ exports.addNewUser = async (req, res, next) => {
     // if (profileImage) {
     //   profileImage = profileImage.replace(/\\/g, "/");
     // }
-
+    
     // Check if the email is already registered
     let existingUser = await User.findOne({ email: email });
     // console.log(existingUser, "test");
