@@ -9,6 +9,7 @@ import { PrivateRoute } from "./PrivateRoute";
 import { AddRecipeModal } from "../pages/AddRecipeModal";
 import SingleRecipe from "../pages/SingleRecipe";
 import Admin from "../pages/Admin";
+import { SingleUser } from "../pages/SingleUser";
 
 export const AllRoutes = () => {
   return (
@@ -45,6 +46,12 @@ export const AllRoutes = () => {
           <PrivateRoute>
             <SingleRecipe />
           </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/user/:userId"
+        element={
+            <SingleUser />
         }
       ></Route>
       <Route

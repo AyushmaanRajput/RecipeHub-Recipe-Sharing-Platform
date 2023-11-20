@@ -18,6 +18,7 @@ import InfoCard from "../components/home/Card";
 import { RecipeCard } from "../components/home/RecipeCard";
 import ImageGrid from "../components/home/ImageGrid";
 import { Reveal } from "../components/common/Reveal";
+import { useNavigate } from "react-router-dom";
 const recipes = [
   {
     name: "Spicy Mango Salsa",
@@ -106,7 +107,7 @@ export const Home = () => {
         <Box className="cover">
           <img
             src="https://images.pexels.com/photos/1640773/pexels-photo-1640773.jpeg"
-            alt="Hero Background Image"
+            alt="Hero Background"
           />
           <div className="hero-content" style={{ paddingInline: "1rem" }}>
             <Heading
