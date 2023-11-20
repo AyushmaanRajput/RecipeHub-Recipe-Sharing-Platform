@@ -141,7 +141,6 @@ export const getUserData = (token, toast) => async (dispatch) => {
       config
     );
     console.log(response.data.user);
-
     const userWithProfileImage = response.data.user;
     userWithProfileImage.profileImage = `${process.env.REACT_APP_API_URL}/${userWithProfileImage.profileImage}`;
     dispatch({ type: GET_LOGGEDUSER_SUCCESS, payload: userWithProfileImage });

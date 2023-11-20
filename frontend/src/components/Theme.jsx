@@ -27,8 +27,8 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        width: "100vw", // Set width to 100vw
-        overflowX: "hidden", // Set overflow-x to hidden
+        width: "100vw",
+        overflowX: "hidden",
       },
     },
   },
@@ -48,9 +48,19 @@ const theme = extendTheme({
       },
       sizes: {
         lg: {
-          h: "56px",
+          h: "42px",
           fontSize: "lg",
-          px: "32px",
+          px: "24px",
+        },
+        md: {
+          h: "36px",
+          fontSize: "md",
+          px: "16px",
+        },
+        sm: {
+          h: "28px",
+          fontSize: "sm",
+          px: "10px",
         },
       },
       variants: {

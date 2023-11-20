@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -54,7 +54,7 @@ let imageUrls = [
   "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/okl0xaxft6552fjjtz2v.jpg",
   "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tont20fs91ztyywbv1w3.jpg",
   "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/58q9ssssox2malve6cey.jpg",
-  "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/jep6d8153aqns3lmxkzz.jpg"
+  "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/jep6d8153aqns3lmxkzz.jpg",
 ];
 export const Home = () => {
   const dispatch = useDispatch();
@@ -67,6 +67,39 @@ export const Home = () => {
       dispatch(getUserData(token, toast));
     }
   }, []);
+
+  const [screenSize, setScreenSize] = useState(getScreenSize());
+
+  function getScreenSize() {
+    return window.innerWidth > 768
+      ? "lg"
+      : window.innerWidth > 480
+      ? "md"
+      : "base";
+  }
+
+  useEffect(() => {
+    function handleResize() {
+      setScreenSize(getScreenSize());
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const getRecipesToDisplay = () => {
+    const recipesToShow = {
+      lg: 6,
+      md: 2,
+      base: 1,
+    };
+    console.log(screenSize);
+    return recipes.slice(0, recipesToShow[screenSize]);
+  };
+
   return (
     <DIV>
       <Reveal>
@@ -75,11 +108,11 @@ export const Home = () => {
             src="https://images.pexels.com/photos/1640773/pexels-photo-1640773.jpeg"
             alt="Hero Background Image"
           />
-          <div className="hero-content">
+          <div className="hero-content" style={{ paddingInline: "1rem" }}>
             <Heading
               as="h1"
-              fontSize="3rem"
-              fontWeight="800"
+              fontSize={{ lg: "3rem", md: "2rem", base: "1.5rem" }}
+              fontWeight={{ lg: "800", md: "700", base: "600" }}
               textTransform="uppercase"
               textAlign="center"
               noOfLines={2}
@@ -95,16 +128,21 @@ export const Home = () => {
             <Button>MORE RECIPES</Button>
             <Grid
               mt="3rem"
-              width="100%"
-              templateColumns="repeat(3, 1fr)"
+              width={{ xl: "100%", lg: "80%", md: "60%", base: "60%" }}
+              templateColumns={{
+                lg: "repeat(3, 1fr)",
+                md: "repeat(2,1fr)",
+                base: "1fr",
+              }}
+              mx={{ base: "auto" }}
               justifyContent="center"
               alignItems={"center"}
-              gap={"3rem"}
+              gap={{ lg: "3rem", md: "2rem", base: "1rem" }}
             >
-              {recipes.map((el, i) => {
+              {getRecipesToDisplay().map((el, i) => {
                 return (
-                  <Reveal delay={1 + (i + 1) * 0.25}>
-                    <Homecard {...el} key={i} />
+                  <Reveal key={i} delay={1 + (i + 1) * 0.25}>
+                    <Homecard {...el} />
                   </Reveal>
                 );
               })}
@@ -112,7 +150,7 @@ export const Home = () => {
           </div>
         </Box>
       </Reveal>
-      <Box py={40}>
+      <Box py={{ lg: 20, md: 16, base: 10 }}>
         <Reveal>
           <InfoCard
             img={
@@ -120,7 +158,8 @@ export const Home = () => {
             }
             title={"HEALTHY AND QUALITY WITH A NEW FEEL"}
             direction={"row"}
-            mb={"10rem"}
+            screenSize={screenSize}
+            mb={"15rem"}
           />
         </Reveal>
         <Reveal>
@@ -128,16 +167,17 @@ export const Home = () => {
             img={
               "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/yd6q7vj4fhvteleq0065.jpg"
             }
+            screenSize={screenSize}
             title={"TASTE THE FUTURE OF GOOD FOOD"}
             direction={"row-reverse"}
           />
         </Reveal>
       </Box>
       <Reveal>
-        <Box textAlign="center" py={20}>
+        <Box textAlign="center" py={{ lg: 20, md: 16, base: 10 }}>
           <Heading
             fontFamily={"Kaushan Script, sans-serif"}
-            size="lg"
+            size={{ lg: "lg", md: "md", base: "sm" }}
             color="primary.500"
             mb="0.5rem"
           >
@@ -151,6 +191,7 @@ export const Home = () => {
             color="text"
             maxW="500px"
             mx="auto"
+            size={{ lg: "xl", md: "lg", base: "md" }}
           >
             {" "}
             MOST POPULAR ITEM{" "}
@@ -161,11 +202,16 @@ export const Home = () => {
             Odit id et est eveniet officiis.{" "}
           </Text>
           <Button mb={"4rem"}>Explore More</Button>
-          <SimpleGrid columns={4} spacing={4} width="min(80rem,100%)" mx="auto">
-            {imageUrls.map((el,i)=>{
-              return <RecipeCard key={i} img={el} />
+          <SimpleGrid
+            columns={{ lg: 4, md: 2, base: 1 }}
+            spacing={4}
+            width="min(80rem,100%)"
+            mx="auto"
+            px={{ lg: 4, base: 8 }}
+          >
+            {imageUrls.map((el, i) => {
+              return <RecipeCard key={i} img={el} />;
             })}
-          
           </SimpleGrid>
         </Box>
       </Reveal>
@@ -173,18 +219,22 @@ export const Home = () => {
         <Flex
           mx="auto"
           // border="1px solid black"
-          direction={"row"}
-          paddingBlock="5rem 10rem"
+          direction={{ lg: "row", md: "row", base: "column" }}
+          paddingBlock={{ lg: "8rem 10rem", md: "5rem", base: "4rem" }}
+          px={4}
           width="min(80rem,100%)"
           alignItems="center"
           justifyContent={"space-between"}
           gap="2rem"
         >
           <ImageGrid />
-          <Box width="50%" textAlign="right">
+          <Box
+            width={{ lg: "50%", base: "100%" }}
+            textAlign={{ lg: "right", base: "center" }}
+          >
             <Heading
               fontFamily={"Kaushan Script, sans-serif"}
-              size="lg"
+              size={{ lg: "lg", md: "md", base: "sm" }}
               color="primary.500"
               mb="0.5rem"
             >
@@ -194,10 +244,11 @@ export const Home = () => {
               fontWeight="800"
               lineHeight={1.15}
               mb="1rem"
-              noOfLines={2}
+              noOfLines={{ lg: 2 }}
               color="text"
-              maxW="500px"
+              maxW={{ lg: "500px" }}
               ml="auto"
+              size={{ lg: "xl", md: "lg", base: "md" }}
             >
               THAT'S WHAT OUR <br /> SAY CLIENT
             </Heading>
@@ -243,6 +294,15 @@ const DIV = styled.div`
       inset: 0;
       background-color: #fff4;
       z-index: 1;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .cover {
+      height: 70vh;
+      img {
+        width: 100%;
+        min-height: 100%;
+      }
     }
   }
 `;

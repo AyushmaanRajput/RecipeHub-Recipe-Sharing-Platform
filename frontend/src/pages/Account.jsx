@@ -53,7 +53,7 @@ export const Account = () => {
     localStorage.getItem("token");
   // console.log(token)
   const user = useSelector((store) => store.authReducer.loggedInUser);
-  console.log("user" , user)
+  console.log("user", user);
   // const recipes = useSelector((store) => store.authReducer.recipes);
   const [recipes, setRecipes] = useState([]);
   const [likedRecipes, setLikedRecipes] = useState([]);
@@ -67,16 +67,11 @@ export const Account = () => {
     const newUserName = userName || user?.name;
     const newUserBio = userBio || user?.bio;
     const newUserCity = userCity || user?.city;
-    const relativePath = user?.profileImage.replace(
-      /http:\/\/localhost:8080\//g,
-      ""
-    );
 
     const data = {
       name: newUserName,
       bio: newUserBio,
       city: newUserCity,
-      profileImage: relativePath,
     };
     console.log("Data that i wanter to get updated", data);
     const headers = {
@@ -207,9 +202,9 @@ export const Account = () => {
           w={"min(80rem,100%)"}
           mx={"auto"}
           display={"flex"}
+          flexDirection={{ base: "column", md: "row", lg: "row" }}
           justifyContent={"space-between"}
           gap="1rem"
-         
         >
           {/* User Profile Info */}
           <Box
@@ -218,12 +213,13 @@ export const Account = () => {
             borderColor={"accent"}
             borderRadius={"50%"}
             overflow="hidden"
-            w={{md:'25%',base:"100%"}}
+            aspectRatio={1}
+            w={{ md: "35%", base: "50%", lg: "35%" }}
+            mx={{ base: "auto" }}
           >
             <Image
               aspectRatio={1}
-              w={{base:"100%"}}
-              maxH="20rem"
+              w="100%"
               borderRadius="50%"
               objectFit="cover"
               src={user?.profileImage}

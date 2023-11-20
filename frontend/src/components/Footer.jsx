@@ -19,7 +19,7 @@ function Footer() {
   return (
     <>
       <Divider orientation="horizontal" marginy="2rem" borderRadius="full" />
-      <Box width="min(80rem,100%)" mx="auto" py={10} color="text">
+      <Box width="min(80rem,100%)" mx="auto" py={10} color="text" px={4}>
         <Text
           fontFamily={"Kaushan Script"}
           fontSize="2xl"
@@ -31,7 +31,11 @@ function Footer() {
             Hub
           </Text>
         </Text>
-        <Flex justifyContent="space-between">
+        <Flex
+          wrap={'wrap'}
+          gap={4}
+          justifyContent="space-between"
+        >
           <Box>
             <Heading as="h6" size="MD" marginBottom="16px">
               ABOUT NCG
@@ -41,7 +45,7 @@ function Footer() {
             <Text>Work with me</Text>
             <Text>Contact</Text>
           </Box>
-          <Box>
+          <Box p={0} mr={4}>
             <Heading as="h6" size="MD" marginBottom="16px">
               EXPLORE
             </Heading>

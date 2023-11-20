@@ -9,6 +9,7 @@ import {
   Stack,
   Divider,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import FeedCard from "./FeedCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +33,18 @@ export const UserFeed = () => {
     <Box p={5} w="50%" h="90vh" overflowY="scroll" className="scroll">
       {isLoading ? (
         // Display loading state if the data is still being fetched
-        <Heading as="h2">Loading...</Heading>
+        <Flex alignItems="center" justifyContent={"center"} minH={"50vh"}>
+          <Spinner
+            w="6rem"
+            h="6rem"
+            mx="auto"
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="primary.500"
+            size="2xl"
+          />
+        </Flex>
       ) : feed.length > 0 ? (
         feed.map((recipe, index) => {
           return <FeedCard key={index} recipe={recipe} />;
