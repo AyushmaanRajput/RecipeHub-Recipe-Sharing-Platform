@@ -91,7 +91,7 @@ exports.getMyRecipe = async (req, res, next) => {
     try {
       const recipe = await User.findOne({ _id: userId }).populate("recipes")
       .populate("likedRecipes")
-      .populate("savedRecipes");;
+      .populate("savedRecipes");
       res.status(201).json(recipe);
     } catch (error) {
       return res

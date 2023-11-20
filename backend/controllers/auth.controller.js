@@ -8,11 +8,6 @@ exports.addNewUser = async (req, res, next) => {
   try {
     const { name, email, password, city, gender, bio } = req.body;
     const profileImage = req.file ? req.file.path : null;
-    // console.log(name, email, password, city, gender, bio);
-    // if (profileImage) {
-    //   profileImage = profileImage.replace(/\\/g, "/");
-    // }
-    
     // Check if the email is already registered
     let existingUser = await User.findOne({ email: email });
     // console.log(existingUser, "test");

@@ -25,6 +25,7 @@ import {
   EditableInput,
   Input,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { updateRecipe } from "../../redux/recipeReducer/actions";
 import { updateUser } from "../../redux/userReducer/actions";
@@ -267,7 +268,17 @@ export default function FeedCard({ recipe }) {
   };
 
   if (!recipe) {
-    return <>Loading...</>; // Or display a loading message or handle this case as needed
+    return (
+      <>
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="2xl"
+        />
+      </>
+    ); 
   }
   return (
     <div style={{ marginBlock: "0 2rem" }}>

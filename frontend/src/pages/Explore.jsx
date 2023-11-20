@@ -29,6 +29,7 @@ import {
   CardFooter,
   Card,
   CardHeader,
+  Spinner,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
@@ -58,6 +59,7 @@ export const Explore = () => {
 
   const handleFilter = () => {
     setFilter(!filter);
+    onClose();
   };
 
   // Function to set cuisine multiple option
@@ -107,6 +109,7 @@ export const Explore = () => {
         }
 
         setRecipe(filteredRecipes); // Set the state with the filtered or unfiltered recipes
+        setSelectedOption(null);
       })
       .catch((err) => {
         console.log(err);
@@ -155,7 +158,7 @@ export const Explore = () => {
               size="2xl"
               color="white"
               textShadow="1px 1px 2px black"
-              noOfLines={1}
+              textAlign={"center"}
             >
               Find the best recipes in a few step!
             </Heading>
@@ -277,9 +280,20 @@ export const Explore = () => {
         </Box>
         {/* Mapping all recipe */}
         <DIV>
-          {recipe?.length > 0 &&
+          {recipe.length == 0 ? (
+            <Spinner
+              mx="auto"
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="primary.500"
+              size="xl"
+            />
+          ) : (
+            recipe?.length > 0 &&
             recipe.map((ele, index) => (
               <Card
+                textAlign={"left"}
                 key={index}
                 boxShadow={"lg"}
                 borderRadius="1rem"
@@ -342,7 +356,6 @@ export const Explore = () => {
                         },
                       }}
                     >
-
                       <Button
                         flex={{ base: "1", md: "0.25" }}
                         variant="outline"
@@ -358,7 +371,8 @@ export const Explore = () => {
                   </Box>
                 </Box>
               </Card>
-            ))}
+            ))
+          )}
         </DIV>
       </Box>
     </>
@@ -366,6 +380,8 @@ export const Explore = () => {
 };
 
 const DIV = styled.div`
+  text-align: center;
+  min-height: 20vh;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;

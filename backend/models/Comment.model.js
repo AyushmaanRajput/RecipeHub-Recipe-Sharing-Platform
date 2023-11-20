@@ -7,6 +7,13 @@ const commentSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  replies:[
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
+    }
+  ]
+  ,
   recipeId: String,
 });
 
