@@ -14,8 +14,16 @@ import {
   FaPinterest,
   FaLinkedin,
 } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 function Footer() {
+
+  const location = useLocation();
+
+  if(location.pathname === "/admin") {
+    return
+  }
+
   return (
     <>
       <Divider orientation="horizontal" marginy="2rem" borderRadius="full" />
