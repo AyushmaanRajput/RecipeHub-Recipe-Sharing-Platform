@@ -10,6 +10,7 @@ import { AddRecipeModal } from "../pages/AddRecipeModal";
 import SingleRecipe from "../pages/SingleRecipe";
 import Admin from "../pages/Admin";
 import { SingleUser } from "../pages/SingleUser";
+import AdminNew from "../pages/AdminNew";
 
 export const AllRoutes = () => {
   return (
@@ -58,7 +59,7 @@ export const AllRoutes = () => {
         path="/admin"
         element={
           // <PrivateRoute>
-            <Admin />
+            <AdminNew />
           // </PrivateRoute>
         }
       ></Route>

@@ -305,7 +305,7 @@ export const AddRecipeForm = ({ closeModal }) => {
               <Button variant="outline" m={0} onClick={closeModal}>
                 Close
               </Button>
-              <Button onClick={() => setStep(step + 1)}>Next</Button>
+              <Button onClick={() => (step + 1)}>Next</Button>
             </Flex>
           </Stack>
         );
