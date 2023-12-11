@@ -621,60 +621,6 @@ const ADMIN = styled.div`
     border-right: 1px solid #ccc;
     padding: 50px 0px;
   }
-  /* .tabs .tab-header > div {
-    height: 50px;
-    line-height: 50px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #888;
-    cursor: pointer;
-    padding-left: 10px;
-  }
-  .tabs .tab-header > div:hover,
-  .tabs .tab-header > div.active {
-    color: #00acee;
-  }
-  .tabs .tab-header div i {
-    display: inline-block;
-    margin-left: 10px;
-    margin-right: 5px;
-  }
-  .tabs .tab-content {
-    position: relative;
-    height: 100%;
-    overflow-y: scroll;
-  }
-  .tabs .tab-content > div > i {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    background: #555;
-    color: #f5f5f5;
-    font-size: 25px;
-    font-weight: 600;
-    text-align: center;
-    line-height: 50px;
-    border-radius: 50%;
-  }
-  .tabs .tab-content > div {
-    position: absolute;
-    text-align: center;
-    padding: 40px 20px;
-    top: -200%;
-    transition: all 500ms ease-in-out;
-  }
-  .tabs .tab-content > div.active {
-    top: 0px;
-  }
-
-  .tabs .tab-indicator {
-    position: absolute;
-    width: 4px;
-    height: 50px;
-    background: #00acee;
-    left: 198px;
-    top: 80px;
-  } */
 `;
 
 const SidebarContainer = styled.div`

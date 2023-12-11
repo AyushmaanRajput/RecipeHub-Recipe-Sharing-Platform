@@ -17,7 +17,7 @@ import {
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { FaBell } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { logoutUser } from "../../redux/authReducer/actions";
 import { Notifications } from "./Notifications";
 
@@ -28,6 +28,7 @@ export const Navbar = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
+  const address = useLocation();
 
   const bgColor = useColorModeValue("white", "gray.800");
   const textColor = useColorModeValue("primary-500", "white");
@@ -37,6 +38,10 @@ export const Navbar = () => {
   const logoutHandler = () => {
     dispatch(logoutUser(token, toast, navigate));
   };
+
+  if(address.pathname === "/admin") {
+    return 
+  }
 
   return (
     <Box w="min(100%,80rem)" mx="auto">
