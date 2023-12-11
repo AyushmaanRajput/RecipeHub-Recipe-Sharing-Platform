@@ -55,6 +55,8 @@ import VegNonVegChart from "../components/Charts/VegNonVeg";
 import Cuisines from "../components/Charts/Cusines";
 import { Carousel } from "../components/Feed/SingleRecipeCarousel";
 import { BiShare } from "react-icons/bi";
+import { GiExitDoor } from "react-icons/gi";
+import { IoFastFoodOutline } from "react-icons/io5";
 
 export default function AdminNew() {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -151,10 +153,10 @@ export default function AdminNew() {
           <NavItem icon={AiOutlineTeam} onClick={() => setSection(2)}>
             Users
           </NavItem>
-          <NavItem icon={BsFolder2} onClick={() => setSection(3)}>
+          <NavItem icon={IoFastFoodOutline} onClick={() => setSection(3)}>
             Recipes
           </NavItem>
-          <NavItem icon={BsCalendarCheck} onClick={() => navigate("/")}>
+          <NavItem icon={GiExitDoor} onClick={() => navigate("/")}>
             Logout
           </NavItem>
         </Flex>
@@ -207,10 +209,10 @@ export default function AdminNew() {
               <NavItem icon={AiOutlineTeam} onClick={() => setSection(2)}>
                 Users
               </NavItem>
-              <NavItem icon={BsFolder2} onClick={() => setSection(3)}>
+              <NavItem icon={IoFastFoodOutline} onClick={() => setSection(3)}>
                 Recipes
               </NavItem>
-              <NavItem icon={BsCalendarCheck} onClick={() => navigate("/")}>
+              <NavItem icon={GiExitDoor} onClick={() => navigate("/")}>
                 Logout
               </NavItem>
             </Flex>
